@@ -2,8 +2,8 @@ import React from "react";
 
 export default function Career() {
   return (
-    <section className="px-6 lg:px-12 mt-24">
-      <div className="max-w-7xl mx-auto bg-gradient-to-r from-[#1a84ed] to-blue-400 rounded-3xl py-20 px-8 text-center text-white">
+    <section className=" bg-gray-100 py-24 px-6 lg:px-20 ">
+      <div className="max-w-7xl mx-auto bg-gradient-to-r from-[#1a84ed] to-blue-400 rounded-3xl py-15 px-8 text-center text-white">
         
         {/* Inner wrapper for spacing */}
         <div className="max-w-3xl mx-auto flex flex-col items-center gap-8">
@@ -14,8 +14,8 @@ export default function Career() {
           </h2>
 
           {/* Subtext */}
-          <p className="text-white/80 text-lg">
-            Join over 500,000 learners and start your transformation today with a
+          <p className="text-white/80 text-lg ">
+            Join over 500,000 learners and start your transformation today with a<br />
             7-day free trial.
           </p>
 

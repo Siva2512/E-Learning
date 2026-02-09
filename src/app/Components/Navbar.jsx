@@ -7,7 +7,7 @@ import { GiStarShuriken } from "react-icons/gi";
 export default function Navbar() {
   return (
     <nav className="w-full border-b bg-white">
-      <div className="max-w-7xl mx-auto px-6 lg:px-10 py-3 flex items-center gap-10">
+      <div className="max-w-7xl mx-auto px-6 lg:px-20 py-3 flex items-center gap-10">
       
         {/* Logo */}
         <div className="flex items-center gap-2">

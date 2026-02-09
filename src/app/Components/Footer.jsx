@@ -3,7 +3,7 @@ import { GiStarShuriken } from "react-icons/gi";
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-50 border-t mt-24">
+    <footer className="bg-gray-50 lg:px-20">
       <div className="max-w-7xl mx-auto grid grid-cols-2 gap-12 px-6 py-16 md:grid-cols-4">
         
         {/* Brand */}
@@ -51,7 +51,7 @@ export default function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t">
+      <div className="border-t border-[#e0e0e0]">
         <div className="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-500">
           
           <p>© 2024 EduMaster. All rights reserved.</p>

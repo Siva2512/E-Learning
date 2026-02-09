@@ -20,7 +20,7 @@ export default function Platform() {
   ];
 
   return (
-    <section className="bg-gray-50 py-24 px-4 sm:px-6">
+    <section className="bg-gray-100 py-24 px-4 sm:px-6 lg:px-20">
       <div className="max-w-7xl mx-auto">
         
         {/* Heading */}
@@ -28,7 +28,7 @@ export default function Platform() {
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-gray-900">
             Why Choose Our Platform
           </h2>
-          <p className="text-gray-600 mt-4">
+          <p className="text-gray-600 tracking-wide mt-4">
             Designed for the modern learner with a focus on flexibility,
             quality content, and actionable industry insights.
           </p>
