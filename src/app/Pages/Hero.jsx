@@ -21,22 +21,23 @@ export default function Hero() {
                  </h1>
 
                  {/* description */}
-                 <p className="tex-[#475569] mt-4 sm:mt-6 max-w-xl mx-auto lg:mx-0 text-base sm:text-lg">
+                 <p className="text-[#475569] mt-4 sm:mt-6 max-w-xl mx-auto lg:mx-0 text-base sm:text-lg">
                     Unlock your potential with flexible learning paths designed for
                     students and professionals. Learn at your own pace from industry
                     experts.
                     </p>
 
                {/* buttons */}
-               <div className="flex flex-col sm:flex-row items-start justify-start gap-4 mt-8 mb-10 ">
-                <button className="w-auto sm:w-auto px-8  py-4 rounded-md bg-blue-600 hover:bg-blue-700 hover:scale-105 text-white font-semibold">
-                    Start Learning
-                </button>
-                
-                <button className="w-auto sm:w-auto px-8  py-4 rounded-md   border border-bold border-gray-300 hover:bg-white text-gray-900 font-semibold">
-                    Browse Courses
-                </button>
-                </div>
+             <div className="flex flex-col lg:flex-row gap-4 mt-8 mb-10">
+  <button className="w-auto sm:w-full px-6 py-3 sm:px-8 sm:py-4 rounded-md bg-blue-600 hover:bg-blue-700 hover:scale-105 text-white font-semibold">
+    Start Learning
+  </button>
+
+  <button className="w-auto sm:w-full px-6 py-3 sm:px-8 sm:py-4 rounded-md border border-gray-300 hover:bg-white text-gray-900 font-semibold">
+    Browse Courses
+  </button>
+</div>
+
                 
                 
                 <div className="flex items-center gap-4 mt-6">
