@@ -21,7 +21,7 @@ export default function Hero() {
                  </h1>
 
                  {/* description */}
-                 <p className="tex-gray-500 mt-4 sm:mt-6 max-w-xl mx-auto lg:mx-0 text-base sm:text-lg">
+                 <p className="tex-[#475569] mt-4 sm:mt-6 max-w-xl mx-auto lg:mx-0 text-base sm:text-lg">
                     Unlock your potential with flexible learning paths designed for
                     students and professionals. Learn at your own pace from industry
                     experts.
@@ -29,11 +29,11 @@ export default function Hero() {
 
                {/* buttons */}
                <div className="flex flex-col sm:flex-row items-start justify-start gap-4 mt-8 mb-10 ">
-                <button className="w-full sm:w-auto px-8  py-4 rounded-md bg-blue-600 hover:bg-blue-700 hover:scale-105 text-white font-semibold">
+                <button className="w-auto sm:w-auto px-8  py-4 rounded-md bg-blue-600 hover:bg-blue-700 hover:scale-105 text-white font-semibold">
                     Start Learning
                 </button>
                 
-                <button className="w-full sm:w-auto px-8  py-4 rounded-md   border border-bold border-gray-300 hover:bg-white text-gray-900 font-semibold">
+                <button className="w-auto sm:w-auto px-8  py-4 rounded-md   border border-bold border-gray-300 hover:bg-white text-gray-900 font-semibold">
                     Browse Courses
                 </button>
                 </div>
@@ -59,7 +59,7 @@ export default function Hero() {
 
             <div className=" rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg bg-[#779e94] shadow-[#779e94] shadow-2xl">
                 <Image 
-                src="/Macbook.png"
+                src="/MacBook.png"
                 alt="hero image" 
                 width={200}
                 height={400}

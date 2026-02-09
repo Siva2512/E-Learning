@@ -112,7 +112,7 @@ export default function Featured() {
                         </div>
 
                         {/* price and button */}
-                        <div className="border-t border-[#e0e0e0] mt-auto py-4">
+                        <div className="border-t border-[#e0e0e0] mt-8 ">
                             <div className="flex items-center justify-between">
                                 <p className="text-lg font-bold text-gray-900">
                                     ${course.price.toFixed(2)}
