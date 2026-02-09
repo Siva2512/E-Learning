@@ -3,13 +3,13 @@ import Image from "next/image";
 
 export default function Hero() {
   return (
-    <section className="bg-gray-100 pt-16 sm:pt-20 lg:pt-24 pb-16 sm:pb-20 lg:px-20">
+    <section className="bg-gray-100 pt-16 sm:pt-20 lg:pt-24 pb-16 sm:pb-20 px-6 lg:px-20">
 
         <div className=" max-w-7xl mx-auto flex flex-col lg:flex-row items-center  gap-12 lg:gap-16">
 
             {/* left content */}
 
-            <div className="flex-1 text-center lg:text-left">
+            <div className="flex-1 text-left">
                {/* heading  */}
 
                <p className="text-blue-500 font-semibold text-xs tracking-wide uppercase">
