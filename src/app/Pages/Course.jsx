@@ -100,7 +100,7 @@ export default function Course() {
               </ul>
             </div>
 
-            <div className="mb-8">
+            <div className="mb-8 ">
               <h4 className="text-sm font-semibold text-gray-900 mb-3 tracking-wide">LEVEL</h4>
               <ul className="space-y-3 text-sm text-gray-600">
                 {[
@@ -152,9 +152,9 @@ export default function Course() {
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-6 text-sm text-gray-500 mt-6">
+                  <div className="flex items-center justify-between text-xs sm:text-sm text-gray-500 mt-3 pt-4 border-t border-gray-200">
                     <span className="flex items-center gap-1">
-                      <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                      <Star  className="w-4 h-4 text-yellow-500 fill-yellow-500" />
                       {course.rating} ({course.reviews} reviews)
                     </span>
 
