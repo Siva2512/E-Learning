@@ -173,7 +173,7 @@ export default function Course() {
             ))}
 
             <div className="flex justify-center items-center gap-2 pt-6">
-              <button className="w-9 h-9 flex items-center justify-center rounded-md border border-gray-300 hover:border-blue-600 hover:text-blue-600">
+              <button className="w-9 h-9 flex items-center justify-center rounded-md border text-gray-600 bg-white  border-gray-300 hover:border-blue-600 hover:text-blue-600">
                 <ChevronLeft className="w-4 h-4" />
                 </button>
                 {[1, 2, 3, "...", 12].map((p, i) => (
