@@ -178,17 +178,18 @@ export default function Course() {
                 </button>
                 {[1, 2, 3, "...", 12].map((p, i) => (
             <button
-              key={i}
-              className={`w-9 h-9 flex items-center justify-center rounded-md border border-gray-300 text-sm ${
-              p === 1
-              ? "bg-blue-600 text-white border-blue-600"
-              : "hover:border-blue-600 hover:text-blue-600"
+            key={i}
+            className={`w-9 h-9 flex items-center justify-center rounded-md border text-sm transition ${
+            p === 1
+            ? "bg-blue-600 text-black border-blue-600"
+            : "border-gray-300 text-black hover:border-blue-600 hover:text-blue-600 dark:border-gray-600  dark:hover:border-blue-400"
             }`}
             >
               {p}
               </button>
+
             ))}
-            <button className="w-9 h-9 flex items-center justify-center rounded-md border border-gray-300 hover:border-blue-600 hover:text-blue-600">
+            <button className="w-9 h-9 flex items-center justify-center rounded-md border text-gray-600 bg-white border-gray-300 hover:border-blue-600 hover:text-blue-600">
               <ChevronRight className="w-4 h-4" />
               </button>
               </div>
