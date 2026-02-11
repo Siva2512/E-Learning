@@ -173,25 +173,25 @@ export default function Course() {
             ))}
 
             <div className="flex justify-center items-center gap-2 pt-6">
-              <button className="px-3 py-1 rounded-md border bg-white hover:border-blue-600">
+              <button className="w-9 h-9 flex items-center justify-center rounded-md border border-gray-300 hover:border-blue-600 hover:text-blue-600">
                 <ChevronLeft className="w-4 h-4" />
-              </button>
-
-              {[1, 2, 3, "...", 12].map((p, i) => (
-                <button
-                  key={i}
-                  className={`px-3 py-1 rounded-md border ${
-                    p === 1 ? "bg-blue-600 text-white" : "bg-white hover:border-blue-600"
-                  }`}
-                >
-                  {p}
                 </button>
-              ))}
-
-              <button className="px-3 py-1 rounded-md border bg-white hover:border-blue-600">
-                <ChevronRight className="w-4 h-4" />
+                {[1, 2, 3, "...", 12].map((p, i) => (
+            <button
+              key={i}
+              className={`w-9 h-9 flex items-center justify-center rounded-md border border-gray-300 text-sm ${
+              p === 1
+              ? "bg-blue-600 text-white border-blue-600"
+              : "hover:border-blue-600 hover:text-blue-600"
+            }`}
+            >
+              {p}
               </button>
-            </div>
+            ))}
+            <button className="w-9 h-9 flex items-center justify-center rounded-md border border-gray-300 hover:border-blue-600 hover:text-blue-600">
+              <ChevronRight className="w-4 h-4" />
+              </button>
+              </div>
           </div>
         </div>
       </div>
