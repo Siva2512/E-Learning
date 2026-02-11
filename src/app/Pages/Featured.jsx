@@ -117,7 +117,7 @@ export default function Featured() {
                                 <p className="text-lg font-bold text-gray-900">
                                     ${course.price.toFixed(2)}
                                 </p>
-                                <button className="text-blue-500 font-semibold hover:text-blue-400 cursor-pointer">
+                                <button className="text-blue-500 font-semibold pt-4 hover:text-blue-400 cursor-pointer">
                                     Enroll Now
                                 </button>
                             </div>

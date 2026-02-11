@@ -15,7 +15,7 @@ export default function Career() {
 
           {/* Subtext */}
           <p className="text-white/80 text-lg ">
-            Join over 500,000 learners and start your transformation today with a<br />
+            Join over 500,000 learners and start your transformation today with a
             7-day free trial.
           </p>
 
