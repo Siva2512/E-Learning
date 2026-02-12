@@ -46,9 +46,45 @@ export default function Course() {
       image: "/Featured3.png",
       desc: "A fundamental guide to creating layouts that look great on any device, from mobile to ultra-wide desktops.",
     },
+    {
+      id: 4,
+      title: "Python for Data Science",
+      instructor: "Emily Kim",
+      price: 79,
+      rating: 4.6,
+      reviews: "1,500",
+      hours: 32,
+      level: "Intermediate",
+      image: "/Featured3.png",
+      desc: "Learn the fundamentals of Python programming for data analysis and machine learning with hands-on projects.",
+    },
+    {
+      id: 5,
+      title: "UI/UX Design Essentials",
+      instructor: "Jessica Lee",
+      price: 99,
+      rating: 4.5,
+      reviews: "1,200",
+      hours: 20,
+      level: "Beginner",
+      image: "/Featured1.png",
+      desc: "Master the principles of UI/UX design to create intuitive and visually appealing user interfaces.",
+    },
+    {
+      id: 6,
+      title: "Mobile App Development Fundamentals",
+      instructor: "David Kim",
+      price: 89,
+      rating: 4.7,
+      reviews: "900",
+      hours: 28,
+      level: "Intermediate",
+      image: "/Featured2.png",
+      desc: "Learn the essentials of mobile app development using React Native, a popular framework for building cross-platform apps.",
+    },
   ];
 
-  const coursesPerPage = 2;
+  const coursesPerPage = 3;
   const indexOfLastCourse = currentPage * coursesPerPage;
   const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
   const currentCourses = courses.slice(indexOfFirstCourse, indexOfLastCourse);
