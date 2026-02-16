@@ -76,7 +76,7 @@ export default function CourseInfo() {
               />
               <div className="text-sm">
                 <p className="text-gray-500">Instructor</p>
-                <p className="font-medium text-gray-900">John Doe</p>
+                <p className="font-bold text-gray-900">John Doe</p>
               </div>
             </div>
 
@@ -84,7 +84,7 @@ export default function CourseInfo() {
               <FaRegClock className="text-gray-400 w-5 h-5" />
               <div className="text-sm">
                 <p className="text-gray-500">Last Updated</p>
-                <p className="font-medium text-gray-900">October 2024</p>
+                <p className="font-bold text-gray-900">October 2024</p>
               </div>
             </div>
 
@@ -92,7 +92,7 @@ export default function CourseInfo() {
               <FaGlobe className="text-gray-400 w-5 h-5" />
               <div className="text-sm">
                 <p className="text-gray-500">Language</p>
-                <p className="font-medium text-gray-900">English (US)</p>
+                <p className="font-bold text-gray-900">English (US)</p>
               </div>
             </div>
           </div>
@@ -104,23 +104,26 @@ export default function CourseInfo() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-20 grid lg:grid-cols-3 gap-10">
 
           {/* Left Content */}
-          <div className="lg:col-span-2 ">
+          <div className="lg:col-span-2 space-y-8 ">
 
             {/* Description */}
-            <div>
+            <div >
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
                 Course Description
               </h2>
-              <p className="text-gray-600 leading-relaxed">
+              <div className="text-gray-600 leading-relaxed space-y-4">
+              <p className="text-gray-600 leading-relaxed space-y-4">
                 This comprehensive course is designed for web developers who want to bridge the gap
                 between intermediate knowledge and professional-grade architectural mastery. We don't just
                 teach syntax; we focus on the "why" behind the most successful software patterns used at scale
                 today.
-                <br />
+                </p>
+                <p>
                 You will build a full-scale Enterprise Application from scratch, implementing features
                 like real-time synchronization, advanced state management, and robust CI/CD pipelines.
                 By the end of this journey, you'll be comfortable navigating complex codebases and leading technical decisions.
               </p>
+            </div>
             </div>
 
 
@@ -202,13 +205,17 @@ export default function CourseInfo() {
             </div>
 
             <div className="mt-4">
+              <div className="flex items-end gap-3">
               <p className="text-2xl font-bold text-gray-900">$89.00</p>
+               <p className="text-gray-400 line-through text-lg">$159.00</p>
+               <p className="text-green-600 font-semibold text-sm">45% OFF</p>
+                </div>
 
-              <button className="w-full mt-4 bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700">
+              <button className="w-full mt-5 bg-blue-600 text-white py-3 rounded-xl font-medium hover:bg-blue-700 transition">
                 Enroll Now
               </button>
 
-              <button className="w-full mt-3 border py-3 rounded-lg font-medium">
+              <button className="w-full mt-3 bg-gray-100 text-gray-900 py-3 rounded-xl font-medium hover:bg-gray-200 transitio">
                 Add to Cart
               </button>
             </div>
@@ -246,7 +253,7 @@ export default function CourseInfo() {
                 </li>
               </ul>
 
-              <div className="border-t mt-6 pt-4 text-center">
+              <div className="border-t border-[#e0e0e0] mt-6 pt-4 text-center">
                 <p className="text-xs text-gray-500">30-Day Money-Back Guarantee</p>
                 <p className="text-sm text-blue-600 font-medium mt-1">
                   Refer a friend & get 10% off
