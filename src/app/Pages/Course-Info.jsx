@@ -3,6 +3,8 @@
 import Image from "next/image";
 import { useState } from "react";
 import { Star, PlayCircle, CheckCircle, ChevronDown } from "lucide-react";
+import { FaRegClock, FaGlobe,FaAward, FaInfinity, FaHeadphonesAlt, FaDownload, FaLaptop  } from "react-icons/fa";
+
 
 export default function CourseInfo() {
   const [openSection, setOpenSection] = useState(0);
@@ -40,11 +42,11 @@ export default function CourseInfo() {
   ];
 
   return (
-    <section className="bg-gray-50 min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-20 py-10">
+    <section className="min-h-screen bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-20 pt-10 pb-2">
 
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-4">
           <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
             <span className="bg-blue-100 text-blue-600 px-2 py-1 rounded">
               BESTSELLER
@@ -62,13 +64,47 @@ export default function CourseInfo() {
             performance, and build scalable backend systems with Node.js and
             TypeScript.
           </p>
-        </div>
 
-        {/* Layout */}
-        <div className="grid lg:grid-cols-3 gap-10">
+          <div className="flex flex-wrap items-center gap-6 mt-6">
+            <div className="flex items-center gap-3">
+              <Image
+                src="/Featured1.png"
+                alt="John Doe"
+                width={40}
+                height={40}
+                className="rounded-full"
+              />
+              <div className="text-sm">
+                <p className="text-gray-500">Instructor</p>
+                <p className="font-medium text-gray-900">John Doe</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <FaRegClock className="text-gray-400 w-5 h-5" />
+              <div className="text-sm">
+                <p className="text-gray-500">Last Updated</p>
+                <p className="font-medium text-gray-900">October 2024</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <FaGlobe className="text-gray-400 w-5 h-5" />
+              <div className="text-sm">
+                <p className="text-gray-500">Language</p>
+                <p className="font-medium text-gray-900">English (US)</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+  
+      <div className="bg-[#f5f6f7] py-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-20 grid lg:grid-cols-3 gap-10">
 
           {/* Left Content */}
-          <div className="lg:col-span-2 space-y-10">
+          <div className="lg:col-span-2 ">
 
             {/* Description */}
             <div>
@@ -76,17 +112,18 @@ export default function CourseInfo() {
                 Course Description
               </h2>
               <p className="text-gray-600 leading-relaxed">
-                This comprehensive course is designed for web developers who
-                want to bridge the gap between intermediate knowledge and
-                professional-grade architectural mastery. You will build a
-                full-scale enterprise application from scratch, implementing
-                real-time synchronization, advanced state management, and
-                robust CI/CD pipelines.
-                
+                This comprehensive course is designed for web developers who want to bridge the gap
+                between intermediate knowledge and professional-grade architectural mastery. We don't just
+                teach syntax; we focus on the "why" behind the most successful software patterns used at scale
+                today.
+                <br />
+                You will build a full-scale Enterprise Application from scratch, implementing features
+                like real-time synchronization, advanced state management, and robust CI/CD pipelines.
+                By the end of this journey, you'll be comfortable navigating complex codebases and leading technical decisions.
               </p>
             </div>
 
-            {/* What you'll learn */}
+
             <div>
               <h3 className="font-semibold text-gray-900 mb-4">
                 What you'll learn
@@ -115,21 +152,15 @@ export default function CourseInfo() {
 
               <div className="space-y-3">
                 {curriculum.map((section, i) => (
-                  <div key={i} className="bg-white rounded-xl border">
+                  <div key={i} className="bg-white rounded-xl">
 
                     <button
-                      onClick={() =>
-                        setOpenSection(openSection === i ? -1 : i)
-                      }
+                      onClick={() => setOpenSection(openSection === i ? -1 : i)}
                       className="w-full flex items-center justify-between p-4 text-left"
                     >
                       <div>
-                        <p className="font-medium text-gray-900">
-                          {section.title}
-                        </p>
-                        <p className="text-xs text-gray-500 mt-1">
-                          {section.meta}
-                        </p>
+                        <p className="font-medium text-gray-900">{section.title}</p>
+                        <p className="text-xs text-gray-500 mt-1">{section.meta}</p>
                       </div>
 
                       <ChevronDown
@@ -142,17 +173,12 @@ export default function CourseInfo() {
                     {openSection === i && section.lessons.length > 0 && (
                       <ul className="px-4 pb-4 space-y-3 text-sm text-gray-600">
                         {section.lessons.map((lesson, idx) => (
-                          <li
-                            key={idx}
-                            className="flex items-center justify-between"
-                          >
+                          <li key={idx} className="flex items-center justify-between">
                             <span className="flex items-center gap-2">
                               <PlayCircle className="w-4 h-4" />
                               {lesson.name}
                             </span>
-                            <span className="text-xs text-gray-500">
-                              {lesson.time}
-                            </span>
+                            <span className="text-xs text-gray-500">{lesson.time}</span>
                           </li>
                         ))}
                       </ul>
@@ -187,30 +213,48 @@ export default function CourseInfo() {
               </button>
             </div>
 
-            {/* What's included */}
+            
             <div className="mt-6">
               <h4 className="text-sm font-semibold text-gray-900 mb-4 tracking-wide">
                 WHAT'S INCLUDED:
               </h4>
 
               <ul className="space-y-4 text-sm text-gray-600">
-                <li className="flex items-center gap-3">🏅 Certificate of completion</li>
-                <li className="flex items-center gap-3">♾️ Lifetime access to course materials</li>
-                <li className="flex items-center gap-3">🎧 24/7 Premium support</li>
-                <li className="flex items-center gap-3">⬇️ 15+ Downloadable resources</li>
-                <li className="flex items-center gap-3">💻 Access on mobile and TV</li>
+                <li className="flex items-center gap-3">
+                  <FaAward className="text-gray-600 w-4 h-4" />
+                  Certificate of completion
+                </li>
+
+                <li className="flex items-center gap-3">
+                  <FaInfinity className="text-gray-600 w-4 h-4" />
+                  Lifetime access to course materials
+                </li>
+
+                <li className="flex items-center gap-3">
+                  <FaHeadphonesAlt className="text-gray-600 w-4 h-4" />
+                  24/7 Premium support
+                </li>
+
+                <li className="flex items-center gap-3">
+                  <FaDownload className="text-gray-600 w-4 h-4" />
+                  15+ Downloadable resources
+                </li>
+
+                <li className="flex items-center gap-3">
+                  <FaLaptop className="text-gray-600 w-4 h-4" />
+                  Access on mobile and TV
+                </li>
               </ul>
 
               <div className="border-t mt-6 pt-4 text-center">
-                <p className="text-xs text-gray-500">
-                  30-Day Money-Back Guarantee
-                </p>
+                <p className="text-xs text-gray-500">30-Day Money-Back Guarantee</p>
                 <p className="text-sm text-blue-600 font-medium mt-1">
                   Refer a friend & get 10% off
                 </p>
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </section>
