@@ -178,9 +178,9 @@ export default function Dashboard() {
           </div>
 
           {/* Recommended */}
-          <div className="bg-white rounded-2xl p-5 space-y-4">
+          <div className=" space-y-4">
             <p className="font-semibold text-gray-900">Recommended for You</p>
-
+            <div className="bg-white rounded-2xl p-5 space-y-4">
             {[
               { title: "UI/UX Design Masterclass", author: "Sarah Smith • 4.9 ★", price: "$49.00", img: "/Featured1.png" },
               { title: "Business Strategy 101", author: "Michael Chen • 4.7 ★", price: "$35.00", img: "/Featured2.png" },
@@ -201,6 +201,7 @@ export default function Dashboard() {
                 </div>
               </div>
             ))}
+          </div>
           </div>
 
         </aside>
