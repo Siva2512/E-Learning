@@ -1,5 +1,5 @@
-import Dashboard from "../Pages/Dashboard";
+// import Dashboard from "../Pages/Student/Dashboard";
 
-export default function Page() {
-  return <Dashboard />;
-}
+// export default function Page() {
+//   return <Dashboard />;
+// }

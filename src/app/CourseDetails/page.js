@@ -1,8 +1,17 @@
 
 
+import Footer from '../Components/Footer';
+import Navbar from '../Components/Navbar';
 import Course from '../Pages/Course';   
 
 
 export default function page() {
-      return <Course />;
+      return (
+      <>
+      <Navbar/>     
+         <Course />
+         <Footer  />
+      </>
+   
+      )
 }
