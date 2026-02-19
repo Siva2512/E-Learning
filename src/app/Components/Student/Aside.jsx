@@ -6,7 +6,7 @@ import { GiStarShuriken } from "react-icons/gi";
 
 export default function Aside() {
   return (
-    <aside className="hidden md:flex w-64 bg-white p-5 flex-col justify-between ">
+    <aside className="hidden md:flex w-55 bg-white p-5 flex-col justify-between ">
 
       {/* Top */}
       <div>

@@ -1,5 +1,6 @@
 import { Clock, GraduationCap, TrendingUp } from "lucide-react";
 
+
 export default function Platform() {
   const features = [
     {
@@ -20,6 +21,7 @@ export default function Platform() {
   ];
 
   return (
+    
     <section className="bg-gray-100 py-24 px-4 sm:px-6 lg:px-20">
       <div className="max-w-7xl mx-auto">
         
@@ -61,5 +63,6 @@ export default function Platform() {
         </div>
       </div>
     </section>
+    
   );
 }

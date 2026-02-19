@@ -1,7 +1,10 @@
-import React from 'react'
+import DashboardLayout from "@/app/Components/Layout/DashboardLayout";
+import StudentCourse from "@/app/Pages/Student/StudentCourse";
 
-export default function page() {
+export default function Page() {
   return (
-    <div>page</div>
-  )
+    <DashboardLayout>
+      <StudentCourse />
+    </DashboardLayout>
+  );
 }

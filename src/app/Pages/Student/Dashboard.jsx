@@ -28,7 +28,7 @@ export default function Dashboard() {
 
   return (
     <div className="flex bg-gray-100 px-4 md:px-6 w-full">
-
+  
       <main className="flex flex-col lg:flex-row gap-6 py-6">
 
         {/* LEFT */}

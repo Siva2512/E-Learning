@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Star } from "lucide-react";
 import { FaArrowRight } from "react-icons/fa";
 
+
 export default function Featured() {
 
     const courses=[
@@ -41,6 +42,7 @@ export default function Featured() {
     ];
 
   return (
+    
     <section className="bg-white py-16 sm:py-20 px-4 sm:px-6 lg:px-20">
         <div className="max-w-7xl mx-auto">
 
@@ -130,5 +132,6 @@ export default function Featured() {
 
         </div>
     </section>
+   
   );
 }

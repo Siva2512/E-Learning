@@ -1,7 +1,9 @@
+
 import React from "react";
 
 export default function Career() {
   return (
+    
     <section className=" bg-gray-100 py-24 px-6 lg:px-20 ">
       <div className="max-w-7xl mx-auto bg-gradient-to-r from-[#1a84ed] to-blue-400 rounded-3xl py-15 px-8 text-center text-white">
         
@@ -27,5 +29,6 @@ export default function Career() {
         </div>
       </div>
     </section>
+    
   );
 }
