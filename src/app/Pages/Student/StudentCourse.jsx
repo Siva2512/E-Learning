@@ -1,8 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 
 export default function StudentCourse() {
+  const [activeTab, setActiveTab] = useState("all");
+
   const courses = [
     {
       id: 1,
@@ -46,11 +49,56 @@ export default function StudentCourse() {
     },
   ];
 
+  
+  const filteredCourses =
+    activeTab === "all"
+      ? courses
+      : activeTab === "completed"
+      ? courses.filter((c) => c.status === "completed")
+      : courses.filter((c) => c.status !== "completed");
+
   return (
-    <div className="p-6">
-      {/* Responsive Grid */}
+    <div className="p-6 space-y-6">
+
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+
+       
+        <div className="flex gap-8 border-b border-gray-200">
+          {["all", "inprogress", "completed"].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`pb-3 text-sm font-medium capitalize relative ${
+                activeTab === tab
+                  ? "text-blue-600"
+                  : "text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              {tab === "all"
+                ? "All Courses"
+                : tab === "inprogress"
+                ? "In Progress"
+                : "Completed"}
+
+              {activeTab === tab && (
+                <span className="absolute left-0 -bottom-[1px] w-full h-[2px] bg-blue-600 rounded"></span>
+              )}
+            </button>
+          ))}
+        </div>
+
+        {/* Sort */}
+        <div className="flex items-center gap-3 text-sm">
+          <span className="text-gray-500">Sort by:</span>
+          <button className="bg-gray-100 px-4 py-2 rounded-xl text-gray-700 font-medium hover:bg-gray-200">
+            Recent Activity
+          </button>
+        </div>
+      </div>
+
+      {/* Cards Grid */}
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {courses.map((course) => (
+        {filteredCourses.map((course) => (
           <div
             key={course.id}
             className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition"
@@ -63,7 +111,7 @@ export default function StudentCourse() {
                 fill
                 className="object-cover"
               />
-              <span className="absolute top-3 left-3 text-xs bg-purple-600 text-white px-2 py-1 rounded-full">
+              <span className="absolute top-3 left-3 text-xs bg-blue-600 text-white px-2 py-1 rounded-full">
                 {course.category}
               </span>
             </div>
@@ -113,12 +161,12 @@ export default function StudentCourse() {
 
         {/* Discover Card */}
         <div className="border-2 border-dashed rounded-2xl flex flex-col items-center justify-center text-center p-6">
-          <div className="text-3xl text-purple-600 mb-2">+</div>
+          <div className="text-3xl text-blue-600 mb-2">+</div>
           <h3 className="font-semibold">Discover New Skills</h3>
           <p className="text-sm text-gray-500 mb-3">
             Explore our catalog of over 500+ premium courses.
           </p>
-          <button className="text-purple-600 font-medium">
+          <button className="text-blue-600 font-medium">
             Browse Course Catalog
           </button>
         </div>
