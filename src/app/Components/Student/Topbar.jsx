@@ -1,9 +1,9 @@
 "use client";
 
-import { Bell, Search } from "lucide-react";
+import { Bell, Search, Menu } from "lucide-react";
 import { usePathname } from "next/navigation";
 
-export default function Topbar() {
+export default function Topbar({ setIsOpen }) {
   const pathname = usePathname();
 
   const titles = {
@@ -17,14 +17,24 @@ export default function Topbar() {
   const pageTitle = titles[pathname] || "Student Dashboard";
 
   return (
-    <nav
-      className="sticky top-0 z-50 backdrop-blur-md bg-white/70 border-b border-gray-200 px-6 py-3
-      flex items-center justify-between"
-    >
-      <h1 className="text-lg font-semibold text-gray-900">
-        {pageTitle}
-      </h1>
+    <nav className="sticky top-0 z-50 backdrop-blur-md bg-white/70 border-b border-gray-200 px-6 py-3 flex items-center justify-between">
+      
+      {/* LEFT SIDE */}
+      <div className="flex items-center gap-3">
+        {/* Mobile Menu Button */}
+        <button
+          onClick={() => setIsOpen(true)}
+          className="md:hidden text-gray-700"
+        >
+          <Menu className="w-6 h-6" />
+        </button>
 
+        <h1 className="text-lg font-semibold text-gray-900">
+          {pageTitle}
+        </h1>
+      </div>
+
+      {/* RIGHT SIDE */}
       <div className="flex items-center gap-4">
         <button className="relative text-gray-500 hover:text-gray-700">
           <Bell className="w-5 h-5" />

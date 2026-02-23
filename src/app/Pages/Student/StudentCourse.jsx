@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -58,9 +59,9 @@ export default function StudentCourse() {
       : courses.filter((c) => c.status !== "completed");
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6">
 
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div className="flex flex-col lg:flex-row lg:items-centerS lg:justify-between gap-4">
 
        
         <div className="flex gap-8 border-b border-gray-200">
