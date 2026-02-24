@@ -12,7 +12,6 @@ export default function Aside({ isOpen, setIsOpen }) {
   const navItems = [
     { name: "Dashboard", href: "/Student", icon: FaHome },
     { name: "My Courses", href: "/Student/StudentCourse", icon: FaBook },
-    { name: "Assignments", href: "/Student/Assignments", icon: FaClipboardList },
     { name: "Messages", href: "/Student/Messages", icon: FaEnvelope },
     { name: "Settings", href: "/Student/Settings", icon: FaCog },
   ];
@@ -45,7 +44,7 @@ export default function Aside({ isOpen, setIsOpen }) {
                 <Link
                   key={index}
                   href={item.href}
-                  onClick={() => setIsOpen(false)} // auto close mobile
+                  onClick={() => setIsOpen(false)} 
                   className={`flex items-center gap-3 px-3 py-2 rounded-lg transition ${
                     isActive
                       ? "bg-blue-50 text-blue-600 font-medium"

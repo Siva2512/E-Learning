@@ -51,12 +51,23 @@ export default function StudentCourse() {
   ];
 
   
-  const filteredCourses =
-    activeTab === "all"
-      ? courses
-      : activeTab === "completed"
-      ? courses.filter((c) => c.status === "completed")
-      : courses.filter((c) => c.status !== "completed");
+let filteredCourses = [];
+
+if (activeTab === "all") {
+  filteredCourses = courses;
+}
+
+if (activeTab === "completed") {
+  filteredCourses = courses.filter(function(course) {
+    return course.status === "completed";
+  });
+}
+
+if (activeTab === "inprogress") {
+  filteredCourses = courses.filter(function(course) {
+    return course.status !== "completed";
+  });
+}
 
   return (
     <div className="space-y-6">
