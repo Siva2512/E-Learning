@@ -27,17 +27,17 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="flex bg-gray-100  w-full">
+    <div className="flex bg-gray-100 p-6">
   
-      <main className="flex flex-col lg:flex-row gap-6 ">
+      <main className="flex flex-col lg:flex-row w-full gap-6 ">
 
         {/* LEFT */}
         <section className="flex-1 flex flex-col gap-6">
 
           {/* Welcome */}
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 py-4 rounded-2xl">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 py-4 rounded-2xl">
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+              <h1 className="text-2xl md:text-2xl font-bold text-gray-900">
                 Welcome back, Alex! 👋
               </h1>
               <p className="text-sm text-gray-500 mt-1">
@@ -46,11 +46,13 @@ export default function Dashboard() {
             </div>
 
             <div className="flex gap-3">
-              <div className="flex items-center gap-3 bg-gray-50 px-4 py-3 rounded-xl">
+              <div className="flex items-center gap-3 bg-gray-50 px-2 py-3 rounded-xl">
                 <BookOpen className="text-blue-600 w-5 h-5" />
                 <div>
-                  <p className="text-lg font-bold">12</p>
-                  <p className="text-xs text-gray-500">IN PROGRESS</p>
+                  <p className="text-xs text-gray-500">
+                    <span className="text-lg font-bold">12</span><br/>
+                    IN PROGRESS
+                  </p>
                 </div>
               </div>
 
@@ -131,7 +133,7 @@ export default function Dashboard() {
         </section>
 
         {/* RIGHT */}
-        <aside className="w-full lg:w-[350px] flex flex-col gap-6">
+        <div className="w-full lg:w-[350px] flex flex-col  gap-6">
 
           {/* Upcoming Deadlines */}
           <div className="rounded-2xl py-5 space-y-4">
@@ -204,7 +206,7 @@ export default function Dashboard() {
           </div>
           </div>
 
-        </aside>
+        </div>
       </main>
     </div>
   );

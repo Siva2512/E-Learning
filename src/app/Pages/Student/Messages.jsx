@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { FiSearch, FiPlus } from "react-icons/fi";
+import { FiSearch, FiPlus, FiArrowLeft } from "react-icons/fi";
 
 export default function Messages() {
-  const [activeChat, setActiveChat] = useState(2);
+  const [activeChat, setActiveChat] = useState(null);
 
   const chats = [
     {
@@ -13,7 +13,7 @@ export default function Messages() {
       name: "Siva",
       message: "Haha oh man 🔥",
       time: "12m",
-      avatar: "/user.png" ,
+      avatar: "/user.png",
       unread: false,
     },
     {
@@ -21,7 +21,7 @@ export default function Messages() {
       name: "Selva st",
       message: "wohooooo",
       time: "24m",
-      avatar: "/user.png" ,
+      avatar: "/user.png",
       unread: true,
     },
     {
@@ -29,7 +29,7 @@ export default function Messages() {
       name: "Kavi",
       message: "Haha that's terrifying 😂",
       time: "1h",
-      avatar: "/user.png" ,
+      avatar: "/user.png",
       unread: false,
     },
   ];
@@ -37,13 +37,15 @@ export default function Messages() {
   const activeUser = chats.find((chat) => chat.id === activeChat);
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen w-full bg-gray-100">
 
       {/* LEFT PANEL */}
-      <div className="w-full bg-white  flex flex-col">
-
+      <div
+        className={`bg-white border-r border-[#e0e0e0] flex flex-col w-full md:w-[350px] 
+        ${activeChat ? "hidden md:flex" : "flex"}`}
+      >
         {/* Header */}
-        <div className="flex items-center justify-between p-5 ">
+        <div className="flex items-center justify-between p-5">
           <h2 className="text-lg font-semibold">
             Messages
             <span className="bg-gray-200 text-xs px-2 py-1 rounded-full ml-2">
@@ -73,11 +75,7 @@ export default function Messages() {
             <div
               key={chat.id}
               onClick={() => setActiveChat(chat.id)}
-              className={`flex items-center gap-3 px-5 py-4 cursor-pointer transition ${
-                activeChat === chat.id
-                  ? "bg-blue-50"
-                  : "hover:bg-gray-100"
-              }`}
+              className="flex items-center gap-3 px-5 py-4 cursor-pointer hover:bg-gray-100"
             >
               <Image
                 src={chat.avatar}
@@ -108,73 +106,72 @@ export default function Messages() {
       </div>
 
       {/* RIGHT PANEL */}
-      <div className="flex-1 flex flex-col">
+      {activeUser && (
+        <div className="flex-1 flex flex-col w-full">
 
-        {/* Chat Header */}
-        <div className="flex items-center gap-3 p-5 bg-white ">
-          <Image
-            src={activeUser.avatar}
-            alt="avatar"
-            width={45}
-            height={45}
-            className="rounded-full object-cover"
-          />
-          <div>
-            <h3 className="font-semibold">{activeUser.name}</h3>
-            <p className="text-xs text-green-500">● Online</p>
-          </div>
-        </div>
+          {/* Chat Header */}
+          <div className="flex items-center gap-3 p-5 bg-white border-b border-[#e0e0e0]">
 
-        {/* Chat Messages */}
-        <div className="flex-1 p-6 space-y-4 overflow-y-auto bg-gray-50">
+            {/* Back button for mobile */}
+            <button
+              onClick={() => setActiveChat(null)}
+              className="md:hidden"
+            >
+              <FiArrowLeft size={20} />
+            </button>
 
-          <div className="flex items-start gap-2">
             <Image
               src={activeUser.avatar}
               alt="avatar"
-              width={35}
-              height={35}
+              width={45}
+              height={45}
               className="rounded-full object-cover"
             />
-            <div className="bg-white px-4 py-2 rounded-2xl text-sm shadow-sm">
-              Hello Siva 👋
+
+            <div>
+              <h3 className="font-semibold">{activeUser.name}</h3>
+              <p className="text-xs text-green-500">● Online</p>
             </div>
           </div>
 
-          <div className="flex justify-end">
-            <div className="bg-blue-600 text-white px-4 py-2 rounded-2xl text-sm">
-              Hi! How are you?
+          {/* Chat Messages */}
+          <div className="flex-1 p-6 space-y-4 overflow-y-auto bg-gray-50">
+
+            <div className="flex items-start gap-2">
+              <Image
+                src={activeUser.avatar}
+                alt="avatar"
+                width={35}
+                height={35}
+                className="rounded-full object-cover"
+              />
+              <div className="bg-white px-4 py-2 rounded-2xl text-sm shadow-sm">
+                Hello 👋
+              </div>
             </div>
+
+            <div className="flex justify-end">
+              <div className="bg-blue-600 text-white px-4 py-2 rounded-2xl text-sm">
+                Hi! How are you?
+              </div>
+            </div>
+
           </div>
 
-          <div className="flex items-start gap-2">
-            <Image
-              src={activeUser.avatar}
-              alt="avatar"
-              width={35}
-              height={35}
-              className="rounded-full object-cover"
+          {/* Message Input */}
+          <div className="p-4 bg-white border-t border-[#e0e0e0] flex gap-3">
+            <input
+              type="text"
+              placeholder="Type a message..."
+              className="flex-1 bg-gray-100 px-4 py-2 rounded-full outline-none text-sm"
             />
-            <div className="bg-white px-4 py-2 rounded-2xl text-sm shadow-sm">
-              I'm doing great! 🚀
-            </div>
+            <button className="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition">
+              Send
+            </button>
           </div>
 
         </div>
-
-        {/* Message Input */}
-        <div className="p-4 bg-white  flex gap-3">
-          <input
-            type="text"
-            placeholder="Type a message..."
-            className="flex-1 bg-gray-100 px-4 py-2 rounded-full outline-none text-sm"
-          />
-          <button className="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition">
-            Send
-          </button>
-        </div>
-
-      </div>
+      )}
     </div>
   );
 }

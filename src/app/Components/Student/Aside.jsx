@@ -20,12 +20,10 @@ export default function Aside({ isOpen, setIsOpen }) {
     <>
       {/* Sidebar */}
       <aside
-        className={`
-          fixed inset-y-0 left-0 z-50 w-56 bg-white p-5 flex flex-col justify-between
-          transform transition-transform duration-300
-          ${isOpen ? "translate-x-0" : "-translate-x-full"}
-          md:static md:translate-x-0 md:flex
-        `}
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-white p-5 flex flex-col justify-between 
+          transform transition-transform duration-300 ${isOpen ? "translate-x-0" : "-translate-x-full"}
+          md:sticky md:top-0 md:h-screen md:translate-x-0`}
+        
       >
         {/* Logo */}
         <div>

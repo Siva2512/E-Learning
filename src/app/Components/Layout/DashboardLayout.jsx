@@ -20,7 +20,7 @@ export default function MainLayout({ children }) {
         <Topbar setIsOpen={setIsOpen} />
 
         {/* Page Content */}
-        <main className="flex-1 p-6 overflow-y-auto">
+        <main className="flex-1 overflow-y-auto">
           {children}
         </main>
 
