@@ -38,14 +38,20 @@ export default function Navbar() {
             />
           </div>
 
-          {/* Sign Up */}
-          <button className="px-4 h-9 md:h-10 rounded-lg bg-blue-500 text-white text-sm font-semibold hover:bg-blue-400 transition whitespace-nowrap">
-  Sign Up
-</button>
 
-<button className="px-4 h-9 md:h-10 rounded-lg bg-gray-200 text-gray-800 text-sm font-semibold hover:bg-gray-300 transition whitespace-nowrap">
-  Log In
-</button>
+          {/* Sign Up */}
+<Link href="/signup">
+  <button className="px-4 h-9 md:h-10 rounded-lg bg-blue-500 text-white text-sm font-semibold hover:bg-blue-400 transition whitespace-nowrap">
+    Sign Up
+  </button>
+</Link>
+
+{/* Log In */}
+<Link href="/login">
+  <button className="px-4 h-9 md:h-10 rounded-lg bg-gray-200 text-gray-800 text-sm font-semibold hover:bg-gray-300 transition whitespace-nowrap">
+    Log In
+  </button>
+</Link>
 
         </div>
 
