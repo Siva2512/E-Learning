@@ -146,8 +146,8 @@ export default function Course() {
   );
 
   return (
-    <section className="bg-gray-50 min-h-screen py-10 px-4 sm:px-6 lg:px-20">
-      <div className="max-w-7xl mx-auto">
+    <section className="bg-gray-50 min-h-screen py-10">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-20">
         {/*  Filter Button in Mobile */}
         <div className="lg:hidden mb-4">
           <button

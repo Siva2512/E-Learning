@@ -1,13 +1,12 @@
 import React from 'react'
 import Image from "next/image";
 
-
 export default function Hero() {
   return (
 
-    <section className="bg-gray-100 pt-16 sm:pt-20 lg:pt-24 pb-16 sm:pb-20 px-6 lg:px-20">
+    <section className="bg-gray-100 pt-16 sm:pt-20 lg:pt-24 pb-16 sm:pb-20">
 
-        <div className=" max-w-7xl mx-auto flex flex-col lg:flex-row items-center  gap-12 lg:gap-16">
+        <div className=" max-w-7xl mx-auto px-6 lg:px-20 flex flex-col lg:flex-row items-center  gap-12 lg:gap-16">
 
             {/* left content */}
 
@@ -58,7 +57,7 @@ export default function Hero() {
 
         {/* right image */}
 
-        <div className="flex-1 w-full relative oder-first lg:oder-last">
+        <div className="flex-1 w-full relative order-first lg:order-last">
 
             <div className=" rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg bg-[#779e94] shadow-[#779e94] shadow-2xl">
                 <Image 

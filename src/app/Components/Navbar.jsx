@@ -12,7 +12,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="w-full border-b bg-white">
+      <nav className="w-full border-b border-[#e0e0e0] bg-white/70 backdrop-blur-md fixed top-0 left-0 z-50">
         <div className="max-w-7xl mx-auto px-6 lg:px-20 py-3 flex items-center gap-10">
           
           {/* Logo */}
