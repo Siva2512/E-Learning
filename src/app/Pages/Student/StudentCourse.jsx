@@ -1,6 +1,6 @@
 
 "use client";
-
+import Link from "next/link";
 import { useState } from "react";
 import Image from "next/image";
 
@@ -173,7 +173,9 @@ if (activeTab === "inprogress") {
 
         {/* Discover Card */}
         <div className="border-2 border-dashed rounded-2xl flex flex-col items-center justify-center text-center p-6">
+          <Link href="/AddCourse">
           <div className="text-3xl text-blue-600 mb-2">+</div>
+          </Link>
           <h3 className="font-semibold">Discover New Skills</h3>
           <p className="text-sm text-gray-500 mb-3">
             Explore our catalog of over 500+ premium courses.

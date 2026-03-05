@@ -3,7 +3,7 @@ import { GiStarShuriken } from "react-icons/gi";
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-50 lg:px-20">
+    <footer id="about" className="bg-gray-50 lg:px-20">
       <div className="max-w-7xl mx-auto grid grid-cols-2 gap-12 px-6 py-16 md:grid-cols-4">
         
         {/* Brand */}

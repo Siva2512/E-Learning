@@ -2,6 +2,7 @@ import React from 'react'
 import Image from "next/image";
 import { Star } from "lucide-react";
 import { FaArrowRight } from "react-icons/fa";
+import Link from "next/link";
 
 
 export default function Featured() {
@@ -56,10 +57,11 @@ export default function Featured() {
                         Hand-picked courses by our top-tier instructors.
                     </p>
                 </div>
-
+                <Link href="/CourseDetails">
                 <button className="flex items-center gap-2 text-blue-400 font-semibold  cursor-pointer hover:underline">
                     View all <FaArrowRight className="hover:underline cursor-pointer" />
                 </button>
+                </Link>
             </div>
 
             {/* cards */}
