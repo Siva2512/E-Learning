@@ -37,7 +37,7 @@ export default function AddCourse() {
       ...course,
     };
 
-    // 👉 Add course to Redux
+    //  Add course to Redux
     dispatch(addCourse(newCourse));
 
     // redirect
