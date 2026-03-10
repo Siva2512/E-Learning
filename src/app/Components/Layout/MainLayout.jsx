@@ -1,15 +1,20 @@
-import React from 'react'
-import Navbar from '../Navbar'
-import Footer from '../Footer'
+"use client";
 
-export default function MainLayout({children}) {
+import Navbar from "../Navbar";
+import Footer from "../Footer";
+
+export default function MainLayout({ children }) {
   return (
-    <div>
-        <Navbar/>
-        <div>
-            {children}
-        </div>
-        <Footer/>
+    <div className="flex flex-col min-h-screen">
+
+      <Navbar />
+
+      <main className="flex-grow">
+        {children}
+      </main>
+
+      <Footer />
+
     </div>
-  )
+  );
 }
