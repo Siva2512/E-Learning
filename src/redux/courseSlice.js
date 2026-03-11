@@ -81,11 +81,37 @@ const courseSlice = createSlice({
   name: "courses",
   initialState,
   reducers: {
+
+    // Add a new course (teacher only)
     addCourse: (state, action) => {
       state.courses.push(action.payload);
-    }
-  }
+    },
+
+    // Delete a course by id
+    deleteCourse: (state, action) => {
+      state.courses = state.courses.filter((c) => c.id !== action.payload);
+    },
+
+    // Edit a course by id
+    updateCourse: (state, action) => {
+      const index = state.courses.findIndex((c) => c.id === action.payload.id);
+      if (index !== -1) {
+        state.courses[index] = { ...state.courses[index], ...action.payload };
+      }
+    },
+
+    // Update student progress on a course
+    updateProgress: (state, action) => {
+      const { id, progress } = action.payload;
+      const course = state.courses.find((c) => c.id === id);
+      if (course) {
+        course.progress = progress;
+        course.status   = progress === 100 ? "completed" : "continue";
+      }
+    },
+
+  },
 });
 
-export const { addCourse } = courseSlice.actions;
+export const { addCourse, deleteCourse, updateCourse, updateProgress } = courseSlice.actions;
 export default courseSlice.reducer;

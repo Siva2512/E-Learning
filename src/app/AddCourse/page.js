@@ -7,7 +7,7 @@ export default function Page() {
   return (
     <>
       <Navbar />
-            <AddCourse/>
+     <AddCourse/>
       <Footer />
     </>
   );

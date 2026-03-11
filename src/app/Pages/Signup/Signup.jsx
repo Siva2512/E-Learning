@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { signup } from "../../../redux/authSlice";
-import { FiMail, FiLock, FiUser, FiUserPlus, FiAlertCircle } from "react-icons/fi";
+import { FiMail, FiLock, FiUser, FiUserPlus, FiAlertCircle, FiCheckCircle } from "react-icons/fi";
+import Snowfall from "react-snowfall";
 
 export default function Signup({ isOpen, onClose }) {
   const dispatch = useDispatch();
@@ -23,11 +24,7 @@ export default function Signup({ isOpen, onClose }) {
   if (!isOpen) return null;
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-
+    setFormData({ ...formData, [e.target.name]: e.target.value });
     if (errorMessage) setErrorMessage("");
   };
 
@@ -42,7 +39,6 @@ export default function Signup({ isOpen, onClose }) {
     setLoading(true);
 
     try {
-
       const userData = {
         name: formData.name,
         email: formData.email,
@@ -50,19 +46,14 @@ export default function Signup({ isOpen, onClose }) {
         role: formData.role,
       };
 
-      // Save to Redux
       dispatch(signup(userData));
-
-      // ✅ Save to localStorage (IMPORTANT for Navbar)
       localStorage.setItem("user", JSON.stringify(userData));
 
       setShowMessage(true);
-
       setTimeout(() => {
         setShowMessage(false);
         onClose();
       }, 2000);
-
     } catch (error) {
       setErrorMessage("Registration failed");
     } finally {
@@ -71,131 +62,155 @@ export default function Signup({ isOpen, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex justify-center items-center z-50 p-4">
+    <>
+      <div className="fixed inset-0 z-40 pointer-events-none">
+        <Snowfall color="#c7d2fe" snowflakeCount={120} />
+      </div>
 
       <div
-        className="relative bg-gray-800/90 backdrop-blur-sm rounded-2xl shadow-xl p-8 w-full max-w-md border border-gray-700"
-        onClick={(e) => e.stopPropagation()}
+        className="fixed inset-0 bg-black/40 backdrop-blur-sm flex justify-center items-center z-50 p-4 overflow-y-auto"
+        onClick={onClose}
       >
-
-        <button
-          onClick={onClose}
-          className="absolute top-3 right-4 text-gray-400 text-xl"
+        <div
+          className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md border border-gray-100 overflow-hidden my-auto"
+          onClick={(e) => e.stopPropagation()}
         >
-          ✕
-        </button>
+          {/* Top accent bar */}
+          <div className="h-1.5 w-full bg-gradient-to-r from-indigo-500 to-blue-700" />
 
-        {showMessage && (
-          <div className="mb-4 p-3 bg-green-500/10 border border-green-500/30 text-green-400 text-sm rounded text-center">
-            Account Created Successfully!
-          </div>
-        )}
+          <div className="p-8">
+            {/* Close */}
+            <button
+              onClick={onClose}
+              className="absolute top-5 right-5 text-gray-300 hover:text-gray-500 text-xl transition"
+            >
+              ✕
+            </button>
 
-        <div className="text-center mb-6">
-          <h2 className="text-3xl font-bold text-white">Create Account</h2>
-          <p className="text-gray-400 mt-2">Join our learning platform</p>
-        </div>
+            {/* Success */}
+            {showMessage && (
+              <div className="mb-5 p-3 bg-green-50 border border-green-100 rounded-xl flex items-center gap-2">
+                <FiCheckCircle className="text-green-500 shrink-0" />
+                <p className="text-green-700 text-sm font-medium">Account Created Successfully!</p>
+              </div>
+            )}
 
-        {errorMessage && (
-          <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg flex gap-2">
-            <FiAlertCircle className="text-red-400 mt-1" />
-            <p className="text-red-300 text-sm">{errorMessage}</p>
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-5">
-
-          {/* Name */}
-          <div>
-            <label className="text-gray-300 text-sm">Full Name</label>
-            <div className="relative mt-1">
-              <FiUser className="absolute left-3 top-3 text-gray-400" />
-              <input
-                type="text"
-                name="name"
-                required
-                placeholder="Enter your name"
-                className="w-full pl-10 p-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-                onChange={handleChange}
-              />
+            {/* Header */}
+            <div className="text-center mb-7">
+              <div className="w-12 h-12 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-3">
+                <FiUserPlus className="text-indigo-600 w-5 h-5" />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900">Create Account</h2>
+              <p className="text-gray-400 text-sm mt-1">Join our learning platform</p>
             </div>
-          </div>
 
-          {/* Email */}
-          <div>
-            <label className="text-gray-300 text-sm">Email</label>
-            <div className="relative mt-1">
-              <FiMail className="absolute left-3 top-3 text-gray-400" />
-              <input
-                type="email"
-                name="email"
-                required
-                placeholder="Enter email"
-                className="w-full pl-10 p-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-                onChange={handleChange}
-              />
-            </div>
-          </div>
+            {/* Error */}
+            {errorMessage && (
+              <div className="mb-5 p-3 bg-red-50 border border-red-100 rounded-xl flex gap-2">
+                <FiAlertCircle className="text-red-500 mt-0.5 shrink-0" />
+                <p className="text-red-600 text-sm">{errorMessage}</p>
+              </div>
+            )}
 
-          {/* Password */}
-          <div>
-            <label className="text-gray-300 text-sm">Password</label>
-            <div className="relative mt-1">
-              <FiLock className="absolute left-3 top-3 text-gray-400" />
-              <input
-                type="password"
-                name="password"
-                required
-                placeholder="Create password"
-                className="w-full pl-10 p-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-                onChange={handleChange}
-              />
-            </div>
-          </div>
+            <form onSubmit={handleSubmit} className="space-y-4">
 
-          {/* Confirm Password */}
-          <div>
-            <label className="text-gray-300 text-sm">Confirm Password</label>
-            <div className="relative mt-1">
-              <FiLock className="absolute left-3 top-3 text-gray-400" />
-              <input
-                type="password"
-                name="confirmPassword"
-                required
-                placeholder="Confirm password"
-                className="w-full pl-10 p-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-                onChange={handleChange}
-              />
-            </div>
-          </div>
+              {/* Name */}
+              <div>
+                <label className="text-gray-600 text-sm font-medium">Full Name</label>
+                <div className="relative mt-1.5">
+                  <FiUser className="absolute left-3 top-2.5 text-gray-400" />
+                  <input
+                    type="text"
+                    name="name"
+                    required
+                    placeholder="Enter your name"
+                    className="w-full pl-9 pr-4 py-2.5 bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 outline-none text-sm transition"
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
 
-          {/* Role */}
-          <div>
-            <label className="text-gray-300 text-sm">Register as</label>
-            <div className="relative mt-1">
-              <FiUserPlus className="absolute left-3 top-3 text-gray-400" />
-              <select
-                name="role"
-                className="w-full pl-10 p-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-                onChange={handleChange}
+              {/* Email */}
+              <div>
+                <label className="text-gray-600 text-sm font-medium">Email</label>
+                <div className="relative mt-1.5">
+                  <FiMail className="absolute left-3 top-2.5 text-gray-400" />
+                  <input
+                    type="email"
+                    name="email"
+                    required
+                    placeholder="Enter email"
+                    className="w-full pl-9 pr-4 py-2.5 bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 outline-none text-sm transition"
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+
+              {/* Password */}
+              <div>
+                <label className="text-gray-600 text-sm font-medium">Password</label>
+                <div className="relative mt-1.5">
+                  <FiLock className="absolute left-3 top-2.5 text-gray-400" />
+                  <input
+                    type="password"
+                    name="password"
+                    required
+                    placeholder="Create password"
+                    className="w-full pl-9 pr-4 py-2.5 bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 outline-none text-sm transition"
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+
+              {/* Confirm Password */}
+              <div>
+                <label className="text-gray-600 text-sm font-medium">Confirm Password</label>
+                <div className="relative mt-1.5">
+                  <FiLock className="absolute left-3 top-2.5 text-gray-400" />
+                  <input
+                    type="password"
+                    name="confirmPassword"
+                    required
+                    placeholder="Confirm password"
+                    className="w-full pl-9 pr-4 py-2.5 bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 outline-none text-sm transition"
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+
+              {/* Role toggle pills */}
+              <div>
+                <label className="text-gray-600 text-sm font-medium">Register as</label>
+                <div className="flex gap-2 mt-1.5">
+                  {["student", "teacher"].map((r) => (
+                    <button
+                      key={r}
+                      type="button"
+                      onClick={() => setFormData({ ...formData, role: r })}
+                      className={`flex-1 py-2 rounded-xl text-sm font-medium border transition capitalize ${
+                        formData.role === r
+                          ? "bg-indigo-600 text-white border-indigo-600"
+                          : "bg-white text-gray-500 border-gray-200 hover:border-indigo-300"
+                      }`}
+                    >
+                      {r}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-gradient-to-r from-indigo-500 to-blue-500 py-2.5 rounded-xl text-white font-semibold hover:from-indigo-600 hover:to-purple-600 transition text-sm mt-2 shadow-sm"
               >
-                <option value="student">Student</option>
-                <option value="teacher">Teacher</option>
-              </select>
-            </div>
+                {loading ? "Creating account..." : "Register"}
+              </button>
+
+            </form>
           </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-gradient-to-r from-indigo-500 to-purple-500 py-3 rounded-lg text-white font-medium hover:from-indigo-600 hover:to-purple-600 transition"
-          >
-            {loading ? "Creating account..." : "Register"}
-          </button>
-
-        </form>
-
+        </div>
       </div>
-    </div>
+    </>
   );
 }
