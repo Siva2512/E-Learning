@@ -27,7 +27,7 @@ export default function Aside({ isOpen, setIsOpen }) {
       >
         {/* Logo */}
         <div>
-          <Link href="/Hero" className="flex items-center gap-2 mb-6">
+          <Link href="/"className="flex items-center gap-2 mb-6">
             <GiStarShuriken className="w-6 h-6 text-blue-600" />
             <h2 className="text-xl font-bold">EduMaster</h2>
           </Link>

@@ -2,8 +2,19 @@
 
 import Image from "next/image";
 import { BookOpen, CheckCircle, Clock } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export default function Dashboard() {
+
+  const [userName, setUserName] = useState("User");
+
+  useEffect(() => {
+    const savedUser = JSON.parse(localStorage.getItem("user"));
+    if (savedUser?.name) {
+      setUserName(savedUser.name);
+    }
+  }, []);
+
   const today = new Date();
 
   const deadlines = [
@@ -28,7 +39,7 @@ export default function Dashboard() {
 
   return (
     <div className="flex bg-gray-100 p-6">
-  
+
       <main className="flex flex-col lg:flex-row w-full gap-6 ">
 
         {/* LEFT */}
@@ -38,7 +49,7 @@ export default function Dashboard() {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 py-4 rounded-2xl">
             <div>
               <h1 className="text-2xl md:text-2xl font-bold text-gray-900">
-                Welcome back, Alex! 👋
+                Welcome back, {userName}! 👋
               </h1>
               <p className="text-sm text-gray-500 mt-1">
                 You have 2 assignments due this week. Keep it up!
@@ -133,7 +144,7 @@ export default function Dashboard() {
         </section>
 
         {/* RIGHT */}
-        <div className="w-full lg:w-[350px] flex flex-col  gap-6">
+        <div className="w-full lg:w-[350px] flex flex-col gap-6">
 
           {/* Upcoming Deadlines */}
           <div className="rounded-2xl py-5 space-y-4">
@@ -180,33 +191,36 @@ export default function Dashboard() {
           </div>
 
           {/* Recommended */}
-          <div className=" space-y-4">
+          <div className="space-y-4">
             <p className="font-semibold text-gray-900">Recommended for You</p>
+
             <div className="bg-white rounded-2xl p-5 space-y-4">
-            {[
-              { title: "UI/UX Design Masterclass", author: "Sarah Smith • 4.9 ★", price: "$49.00", img: "/Featured1.png" },
-              { title: "Business Strategy 101", author: "Michael Chen • 4.7 ★", price: "$35.00", img: "/Featured2.png" },
-            ].map((course, i) => (
-              <div key={i} className="flex items-center gap-3">
-                <Image src={course.img} alt="course" width={48} height={48} className="rounded-lg object-cover" />
+              {[
+                { title: "UI/UX Design Masterclass", author: "Sarah Smith • 4.9 ★", price: "$49.00", img: "/Featured1.png" },
+                { title: "Business Strategy 101", author: "Michael Chen • 4.7 ★", price: "$35.00", img: "/Featured2.png" },
+              ].map((course, i) => (
+                <div key={i} className="flex items-center gap-3">
+                  <Image src={course.img} alt="course" width={48} height={48} className="rounded-lg object-cover" />
 
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-900">{course.title}</p>
-                  <p className="text-xs text-gray-500">{course.author}</p>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-gray-900">{course.title}</p>
+                    <p className="text-xs text-gray-500">{course.author}</p>
 
-                  <div className="flex items-center justify-between mt-1">
-                    <p className="text-sm font-semibold text-gray-900">{course.price}</p>
-                    <button className="w-5 h-5 flex items-center justify-center rounded-full bg-blue-600 text-white hover:bg-blue-700 text-xs">
-                      +
-                    </button>
+                    <div className="flex items-center justify-between mt-1">
+                      <p className="text-sm font-semibold text-gray-900">{course.price}</p>
+                      <button className="w-5 h-5 flex items-center justify-center rounded-full bg-blue-600 text-white hover:bg-blue-700 text-xs">
+                        +
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+
           </div>
 
         </div>
+
       </main>
     </div>
   );

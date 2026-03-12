@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { deleteCourse, updateCourse } from "../../../redux/courseSlice";
+// import { deleteCourse, updateCourse } from "../../../redux/courseSlice";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, CartesianGrid,
@@ -110,7 +110,7 @@ function DeleteConfirm({ course, onClose, onConfirm }) {
   );
 }
 
-export default function TeacherDashboard() {
+export default function AdminDashboard() {
   const dispatch = useDispatch();
   const router   = useRouter();
   const courses  = useSelector((state) => state.courses.courses);
@@ -138,12 +138,12 @@ export default function TeacherDashboard() {
             <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center">
               <span className="text-white text-sm font-bold">T</span>
             </div>
-            <span className="font-semibold text-gray-900 text-lg">TeachBoard</span>
+            <span className="font-semibold text-gray-900 text-lg">AdminBoard</span>
           </div>
           <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-500">{user.name || "Teacher"}</span>
+            <span className="text-sm text-gray-500">{user.name || "Admin"}</span>
             <div className="w-9 h-9 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-semibold text-sm">
-              {(user.name || "T").charAt(0).toUpperCase()}
+              {(user.name || "A").charAt(0).toUpperCase()}
             </div>
           </div>
         </div>
@@ -294,26 +294,33 @@ export default function TeacherDashboard() {
             )}
           </div>
 
-          {/* Recent Activity */}
-          <div className="bg-white border border-gray-200 rounded-xl shadow-sm">
-            <div className="px-5 py-4 border-b border-gray-100">
-              <h2 className="font-semibold text-gray-800">Recent Activity</h2>
-            </div>
-            <div className="p-5 grid sm:grid-cols-2 gap-4">
-              {recentActivity.map((item, i) => (
-                <div key={i} className="flex gap-3">
-                  <div className="w-7 h-7 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-xs font-bold shrink-0">
-                    {item.student.split(" ").map((n) => n[0]).join("")}
+          {/* Recent Student Activity */}
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
+              <div className="px-6 py-4 border-b border-gray-50">
+                <h2 className="font-semibold text-gray-800">Recent Student Activity</h2>
+                <p className="text-xs text-gray-400 mt-0.5">Students who recently logged in</p>
+              </div>
+              <div className="p-5">
+                {recentActivity.length === 0 ? (
+                  <p className="text-sm text-gray-400 text-center py-6">No student activity yet.</p>
+                ) : (
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    {recentActivity.slice(0, 8).map((item, i) => (
+                      <div key={i} className="flex gap-3 items-start">
+                        <div className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-xs font-bold shrink-0">
+                          {item.name ? item.name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0,2) : "S"}
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-gray-700">{item.name || "Student"}</p>
+                          <p className="text-xs text-gray-400">{item.email}</p>
+                          <p className="text-xs text-indigo-400 mt-0.5">Logged in · {item.time}</p>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-700">{item.student}</p>
-                    <p className="text-xs text-gray-500">{item.action}</p>
-                    <p className="text-xs text-indigo-400 mt-0.5">{item.course} · {item.time}</p>
-                  </div>
-                </div>
-              ))}
+                )}
+              </div>
             </div>
-          </div>
 
         </div>
       </div>

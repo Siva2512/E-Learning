@@ -9,16 +9,11 @@ import Snowfall from "react-snowfall";
 
 export default function Login({ isOpen, onClose }) {
   const dispatch = useDispatch();
-  const router = useRouter();
+  const router   = useRouter();
 
-  const [loading, setLoading] = useState(false);
+  const [loading,      setLoading]      = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    role: "student",
-  });
+  const [formData,     setFormData]     = useState({ email: "", password: "", role: "student" });
 
   if (!isOpen) return null;
 
@@ -42,9 +37,9 @@ export default function Login({ isOpen, onClose }) {
       }
 
       if (
-        savedUser.email !== formData.email ||
+        savedUser.email    !== formData.email    ||
         savedUser.password !== formData.password ||
-        savedUser.role !== formData.role
+        savedUser.role     !== formData.role
       ) {
         setErrorMessage("Invalid email, password, or role.");
         setLoading(false);
@@ -53,8 +48,20 @@ export default function Login({ isOpen, onClose }) {
 
       dispatch(login(savedUser));
 
-      if (savedUser.role === "teacher") {
-        router.push("/Teacher");
+      
+      if (savedUser.role === "student") {
+        const existing = JSON.parse(localStorage.getItem("studentActivity") || "[]");
+        const entry = {
+          name:  savedUser.name,
+          email: savedUser.email,
+          time:  new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        };
+        localStorage.setItem("studentActivity", JSON.stringify([entry, ...existing].slice(0, 20)));
+      }
+
+      
+      if (savedUser.role === "admin") {
+        router.push("/Admin");
       } else {
         router.push("/Student");
       }
@@ -82,7 +89,7 @@ export default function Login({ isOpen, onClose }) {
           onClick={(e) => e.stopPropagation()}
         >
           {/* Top accent bar */}
-          <div className="h-1.5 w-full bg-gradient-to-r from-indigo-500 to-blue-700" />
+          <div className="h-1.5 w-full bg-gradient-to-r from-indigo-500 to-purple-500" />
 
           <div className="p-8">
             {/* Close */}
@@ -118,11 +125,8 @@ export default function Login({ isOpen, onClose }) {
                 <div className="relative mt-1.5">
                   <FiMail className="absolute left-3 top-2.5 text-gray-400" />
                   <input
-                    type="email"
-                    name="email"
-                    required
-                    value={formData.email}
-                    onChange={handleChange}
+                    type="email" name="email" required
+                    value={formData.email} onChange={handleChange}
                     placeholder="Enter your email"
                     className="w-full pl-9 pr-4 py-2.5 bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 outline-none text-sm transition"
                   />
@@ -135,56 +139,41 @@ export default function Login({ isOpen, onClose }) {
                 <div className="relative mt-1.5">
                   <FiLock className="absolute left-3 top-2.5 text-gray-400" />
                   <input
-                    type="password"
-                    name="password"
-                    required
-                    value={formData.password}
-                    onChange={handleChange}
+                    type="password" name="password" required
+                    value={formData.password} onChange={handleChange}
                     placeholder="Enter password"
                     className="w-full pl-9 pr-4 py-2.5 bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 outline-none text-sm transition"
                   />
                 </div>
               </div>
 
-              {/* Role */}
+             
               <div>
                 <label className="text-gray-600 text-sm font-medium">Login as</label>
-                <div className="relative mt-1.5">
-                  <FiUser className="absolute left-3 top-2.5 text-gray-400" />
-                  <select
-                    name="role"
-                    value={formData.role}
-                    onChange={handleChange}
-                    className="w-full pl-9 pr-4 py-2.5 bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 outline-none text-sm transition appearance-none"
-                  >
-                    <option value="student">Student</option>
-                    <option value="teacher">Teacher</option>
-                  </select>
+                <div className="flex gap-2 mt-1.5">
+                  {[
+                    { label: "Student", value: "student" },
+                    { label: "Admin",   value: "admin"   },
+                  ].map(({ label, value }) => (
+                    <button
+                      key={value}
+                      type="button"
+                      onClick={() => setFormData({ ...formData, role: value })}
+                      className={`flex-1 py-2 rounded-xl text-sm font-medium border transition ${
+                        formData.role === value
+                          ? "bg-indigo-600 text-white border-indigo-600"
+                          : "bg-white text-gray-500 border-gray-200 hover:border-indigo-300"
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
                 </div>
               </div>
 
-              {/* Role toggle pills (visual) */}
-              <div className="flex gap-2 pt-1">
-                {["student", "teacher"].map((r) => (
-                  <button
-                    key={r}
-                    type="button"
-                    onClick={() => setFormData({ ...formData, role: r })}
-                    className={`flex-1 py-2 rounded-xl text-sm font-medium border transition capitalize ${
-                      formData.role === r
-                        ? "bg-indigo-600 text-white border-indigo-600"
-                        : "bg-white text-gray-500 border-gray-200 hover:border-indigo-300"
-                    }`}
-                  >
-                    {r}
-                  </button>
-                ))}
-              </div>
-
               <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-gradient-to-r from-indigo-500 to-blue-500 py-2.5 rounded-xl text-white font-semibold hover:from-indigo-600 hover:to-purple-600 transition text-sm mt-2 shadow-sm"
+                type="submit" disabled={loading}
+                className="w-full bg-gradient-to-r from-indigo-500 to-purple-500 py-2.5 rounded-xl text-white font-semibold hover:from-indigo-600 hover:to-purple-600 transition text-sm mt-2 shadow-sm"
               >
                 {loading ? "Logging in..." : "Login"}
               </button>

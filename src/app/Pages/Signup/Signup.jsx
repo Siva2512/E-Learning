@@ -9,16 +9,11 @@ import Snowfall from "react-snowfall";
 export default function Signup({ isOpen, onClose }) {
   const dispatch = useDispatch();
 
-  const [loading, setLoading] = useState(false);
+  const [loading,      setLoading]      = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [showMessage, setShowMessage] = useState(false);
-
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    role: "student",
+  const [showMessage,  setShowMessage]  = useState(false);
+  const [formData,     setFormData]     = useState({
+    name: "", email: "", password: "", confirmPassword: "", role: "student",
   });
 
   if (!isOpen) return null;
@@ -40,20 +35,17 @@ export default function Signup({ isOpen, onClose }) {
 
     try {
       const userData = {
-        name: formData.name,
-        email: formData.email,
+        name:     formData.name,
+        email:    formData.email,
         password: formData.password,
-        role: formData.role,
+        role:     formData.role,        
       };
 
       dispatch(signup(userData));
       localStorage.setItem("user", JSON.stringify(userData));
 
       setShowMessage(true);
-      setTimeout(() => {
-        setShowMessage(false);
-        onClose();
-      }, 2000);
+      setTimeout(() => { setShowMessage(false); onClose(); }, 2000);
     } catch (error) {
       setErrorMessage("Registration failed");
     } finally {
@@ -76,7 +68,7 @@ export default function Signup({ isOpen, onClose }) {
           onClick={(e) => e.stopPropagation()}
         >
           {/* Top accent bar */}
-          <div className="h-1.5 w-full bg-gradient-to-r from-indigo-500 to-blue-700" />
+          <div className="h-1.5 w-full bg-gradient-to-r from-indigo-500 to-purple-500" />
 
           <div className="p-8">
             {/* Close */}
@@ -120,12 +112,9 @@ export default function Signup({ isOpen, onClose }) {
                 <div className="relative mt-1.5">
                   <FiUser className="absolute left-3 top-2.5 text-gray-400" />
                   <input
-                    type="text"
-                    name="name"
-                    required
-                    placeholder="Enter your name"
+                    type="text" name="name" required
+                    placeholder="Enter your name" onChange={handleChange}
                     className="w-full pl-9 pr-4 py-2.5 bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 outline-none text-sm transition"
-                    onChange={handleChange}
                   />
                 </div>
               </div>
@@ -136,12 +125,9 @@ export default function Signup({ isOpen, onClose }) {
                 <div className="relative mt-1.5">
                   <FiMail className="absolute left-3 top-2.5 text-gray-400" />
                   <input
-                    type="email"
-                    name="email"
-                    required
-                    placeholder="Enter email"
+                    type="email" name="email" required
+                    placeholder="Enter email" onChange={handleChange}
                     className="w-full pl-9 pr-4 py-2.5 bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 outline-none text-sm transition"
-                    onChange={handleChange}
                   />
                 </div>
               </div>
@@ -152,12 +138,9 @@ export default function Signup({ isOpen, onClose }) {
                 <div className="relative mt-1.5">
                   <FiLock className="absolute left-3 top-2.5 text-gray-400" />
                   <input
-                    type="password"
-                    name="password"
-                    required
-                    placeholder="Create password"
+                    type="password" name="password" required
+                    placeholder="Create password" onChange={handleChange}
                     className="w-full pl-9 pr-4 py-2.5 bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 outline-none text-sm transition"
-                    onChange={handleChange}
                   />
                 </div>
               </div>
@@ -168,41 +151,40 @@ export default function Signup({ isOpen, onClose }) {
                 <div className="relative mt-1.5">
                   <FiLock className="absolute left-3 top-2.5 text-gray-400" />
                   <input
-                    type="password"
-                    name="confirmPassword"
-                    required
-                    placeholder="Confirm password"
+                    type="password" name="confirmPassword" required
+                    placeholder="Confirm password" onChange={handleChange}
                     className="w-full pl-9 pr-4 py-2.5 bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 outline-none text-sm transition"
-                    onChange={handleChange}
                   />
                 </div>
               </div>
 
-              {/* Role toggle pills */}
+             
               <div>
                 <label className="text-gray-600 text-sm font-medium">Register as</label>
                 <div className="flex gap-2 mt-1.5">
-                  {["student", "teacher"].map((r) => (
+                  {[
+                    { label: "Student", value: "student" },
+                    { label: "Admin",   value: "admin"   },
+                  ].map(({ label, value }) => (
                     <button
-                      key={r}
+                      key={value}
                       type="button"
-                      onClick={() => setFormData({ ...formData, role: r })}
-                      className={`flex-1 py-2 rounded-xl text-sm font-medium border transition capitalize ${
-                        formData.role === r
+                      onClick={() => setFormData({ ...formData, role: value })}
+                      className={`flex-1 py-2 rounded-xl text-sm font-medium border transition ${
+                        formData.role === value
                           ? "bg-indigo-600 text-white border-indigo-600"
                           : "bg-white text-gray-500 border-gray-200 hover:border-indigo-300"
                       }`}
                     >
-                      {r}
+                      {label}
                     </button>
                   ))}
                 </div>
               </div>
 
               <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-gradient-to-r from-indigo-500 to-blue-500 py-2.5 rounded-xl text-white font-semibold hover:from-indigo-600 hover:to-purple-600 transition text-sm mt-2 shadow-sm"
+                type="submit" disabled={loading}
+                className="w-full bg-gradient-to-r from-indigo-500 to-purple-500 py-2.5 rounded-xl text-white font-semibold hover:from-indigo-600 hover:to-purple-600 transition text-sm mt-2 shadow-sm"
               >
                 {loading ? "Creating account..." : "Register"}
               </button>
