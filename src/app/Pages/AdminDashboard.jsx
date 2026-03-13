@@ -136,7 +136,7 @@ export default function AdminDashboard() {
         <div className="bg-white border-b border-gray-200 px-8 py-4 flex items-center justify-between shadow-sm">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center">
-              <span className="text-white text-sm font-bold">T</span>
+              <span className="text-white text-sm font-bold">AD</span>
             </div>
             <span className="font-semibold text-gray-900 text-lg">AdminBoard</span>
           </div>

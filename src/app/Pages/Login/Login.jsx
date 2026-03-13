@@ -61,7 +61,7 @@ export default function Login({ isOpen, onClose }) {
 
       
       if (savedUser.role === "admin") {
-        router.push("/Admin");
+        router.push("/AdminPage");
       } else {
         router.push("/Student");
       }
