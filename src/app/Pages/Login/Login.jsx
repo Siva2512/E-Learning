@@ -9,11 +9,15 @@ import Snowfall from "react-snowfall";
 
 export default function Login({ isOpen, onClose }) {
   const dispatch = useDispatch();
-  const router   = useRouter();
+  const router = useRouter();
 
-  const [loading,      setLoading]      = useState(false);
+  const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [formData,     setFormData]     = useState({ email: "", password: "", role: "student" });
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    role: "student",
+  });
 
   if (!isOpen) return null;
 
@@ -28,39 +32,66 @@ export default function Login({ isOpen, onClose }) {
     setErrorMessage("");
 
     try {
-      const savedUser = JSON.parse(localStorage.getItem("user"));
+      const allUsers = JSON.parse(localStorage.getItem("allUsers") || "[]");
 
-      if (!savedUser) {
-        setErrorMessage("No account found. Please sign up first.");
-        setLoading(false);
-        return;
+      const matched = allUsers.find(
+        (u) =>
+          u.email === formData.email &&
+          u.password === formData.password &&
+          u.role === formData.role
+      );
+
+      if (!matched) {
+        const singleUser = JSON.parse(localStorage.getItem("user") || "null");
+
+        if (
+          !singleUser ||
+          singleUser.email !== formData.email ||
+          singleUser.password !== formData.password ||
+          singleUser.role !== formData.role
+        ) {
+          setErrorMessage(
+            "Invalid email, password, or role. Please check and try again."
+          );
+          setLoading(false);
+          return;
+        }
+
+        allUsers.push(singleUser);
+        localStorage.setItem("allUsers", JSON.stringify(allUsers));
       }
 
-      if (
-        savedUser.email    !== formData.email    ||
-        savedUser.password !== formData.password ||
-        savedUser.role     !== formData.role
-      ) {
-        setErrorMessage("Invalid email, password, or role.");
-        setLoading(false);
-        return;
-      }
+      const user = matched || JSON.parse(localStorage.getItem("user"));
 
-      dispatch(login(savedUser));
+      dispatch(login(user));
+      localStorage.setItem("user", JSON.stringify(user));
 
-      
-      if (savedUser.role === "student") {
-        const existing = JSON.parse(localStorage.getItem("studentActivity") || "[]");
+      if (user.role === "student") {
+        const existing = JSON.parse(
+          localStorage.getItem("studentActivity") || "[]"
+        );
+
         const entry = {
-          name:  savedUser.name,
-          email: savedUser.email,
-          time:  new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          name: user.name,
+          email: user.email,
+          action: "Logged in",
+          date: new Date().toLocaleDateString([], {
+            month: "short",
+            day: "numeric",
+          }),
+          time: new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
         };
-        localStorage.setItem("studentActivity", JSON.stringify([entry, ...existing].slice(0, 20)));
+
+        localStorage.setItem(
+          "studentActivity",
+          JSON.stringify([entry, ...existing].slice(0, 20))
+        );
       }
 
-      
-      if (savedUser.role === "admin") {
+      if (user.role === "admin") {
         router.push("/AdminPage");
       } else {
         router.push("/Student");
@@ -88,11 +119,9 @@ export default function Login({ isOpen, onClose }) {
           className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md border border-gray-100 overflow-hidden"
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Top accent bar */}
-          <div className="h-1.5 w-full bg-gradient-to-r from-indigo-500 to-purple-500" />
+          <div className="h-1.5 w-full bg-gradient-to-r from-indigo-500 to-blue-500" />
 
           <div className="p-8">
-            {/* Close */}
             <button
               onClick={onClose}
               className="absolute top-5 right-5 text-gray-300 hover:text-gray-500 text-xl transition"
@@ -100,16 +129,18 @@ export default function Login({ isOpen, onClose }) {
               ✕
             </button>
 
-            {/* Header */}
             <div className="text-center mb-7">
               <div className="w-12 h-12 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-3">
                 <FiUser className="text-indigo-600 w-5 h-5" />
               </div>
-              <h2 className="text-2xl font-bold text-gray-900">Welcome Back!</h2>
-              <p className="text-gray-400 text-sm mt-1">Login to access your account</p>
+              <h2 className="text-2xl font-bold text-gray-900">
+                Welcome Back!
+              </h2>
+              <p className="text-gray-400 text-sm mt-1">
+                Login to access your account
+              </p>
             </div>
 
-            {/* Error */}
             {errorMessage && (
               <div className="mb-5 p-3 bg-red-50 border border-red-100 rounded-xl flex gap-2">
                 <FiAlertCircle className="text-red-500 mt-0.5 shrink-0" />
@@ -119,46 +150,57 @@ export default function Login({ isOpen, onClose }) {
 
             <form onSubmit={handleSubmit} className="space-y-4">
 
-              {/* Email */}
               <div>
-                <label className="text-gray-600 text-sm font-medium">Email</label>
+                <label className="text-gray-600 text-sm font-medium">
+                  Email
+                </label>
                 <div className="relative mt-1.5">
                   <FiMail className="absolute left-3 top-2.5 text-gray-400" />
                   <input
-                    type="email" name="email" required
-                    value={formData.email} onChange={handleChange}
+                    type="email"
+                    name="email"
+                    required
+                    value={formData.email}
+                    onChange={handleChange}
                     placeholder="Enter your email"
                     className="w-full pl-9 pr-4 py-2.5 bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 outline-none text-sm transition"
                   />
                 </div>
               </div>
 
-              {/* Password */}
               <div>
-                <label className="text-gray-600 text-sm font-medium">Password</label>
+                <label className="text-gray-600 text-sm font-medium">
+                  Password
+                </label>
                 <div className="relative mt-1.5">
                   <FiLock className="absolute left-3 top-2.5 text-gray-400" />
                   <input
-                    type="password" name="password" required
-                    value={formData.password} onChange={handleChange}
+                    type="password"
+                    name="password"
+                    required
+                    value={formData.password}
+                    onChange={handleChange}
                     placeholder="Enter password"
                     className="w-full pl-9 pr-4 py-2.5 bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 outline-none text-sm transition"
                   />
                 </div>
               </div>
 
-             
               <div>
-                <label className="text-gray-600 text-sm font-medium">Login as</label>
+                <label className="text-gray-600 text-sm font-medium">
+                  Login as
+                </label>
                 <div className="flex gap-2 mt-1.5">
                   {[
                     { label: "Student", value: "student" },
-                    { label: "Admin",   value: "admin"   },
+                    { label: "Admin", value: "admin" },
                   ].map(({ label, value }) => (
                     <button
                       key={value}
                       type="button"
-                      onClick={() => setFormData({ ...formData, role: value })}
+                      onClick={() =>
+                        setFormData({ ...formData, role: value })
+                      }
                       className={`flex-1 py-2 rounded-xl text-sm font-medium border transition ${
                         formData.role === value
                           ? "bg-indigo-600 text-white border-indigo-600"
@@ -172,8 +214,9 @@ export default function Login({ isOpen, onClose }) {
               </div>
 
               <button
-                type="submit" disabled={loading}
-                className="w-full bg-gradient-to-r from-indigo-500 to-purple-500 py-2.5 rounded-xl text-white font-semibold hover:from-indigo-600 hover:to-purple-600 transition text-sm mt-2 shadow-sm"
+                type="submit"
+                disabled={loading}
+                className="w-full bg-gradient-to-r from-indigo-500 to-blue-500 py-2.5 rounded-xl text-white font-semibold hover:from-indigo-600 hover:to-blue-600 transition text-sm mt-2 shadow-sm"
               >
                 {loading ? "Logging in..." : "Login"}
               </button>

@@ -3,84 +3,138 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useSelector } from "react-redux";
+
 import {
-  Star, Clock, BarChart, ChevronLeft, ChevronRight,
-  PlayCircle, CheckCircle, ChevronDown, X, ShoppingCart
+  Star,
+  Clock,
+  BarChart,
+  ChevronLeft,
+  ChevronRight,
+  PlayCircle,
+  CheckCircle,
+  ChevronDown,
+  X,
+  ShoppingCart,
 } from "lucide-react";
+
 import { IoMenuSharp } from "react-icons/io5";
+
 import {
-  FaRegClock, FaGlobe, FaAward, FaInfinity,
-  FaHeadphonesAlt, FaDownload, FaLaptop,
+  FaRegClock,
+  FaGlobe,
+  FaAward,
+  FaInfinity,
+  FaHeadphonesAlt,
+  FaDownload,
+  FaLaptop,
 } from "react-icons/fa";
 
 import CoursePlayer from "./CoursePlayer";
-import CourseInfoPanel from "./CourseInfoPanel"; 
+import CourseInfoPanel from "./CourseInfoPanel";
+
+/* modals */
+
 function EnrollSuccessModal({ course, onStart, onClose }) {
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+
       <div className="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-8 text-center">
+
         <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <CheckCircle className="w-8 h-8 text-green-600" />
         </div>
-        <h2 className="text-xl font-bold text-gray-900">Enrolled!</h2>
+
+        <h2 className="text-xl font-bold text-gray-900">
+          Enrolled!
+        </h2>
+
         <p className="text-gray-500 text-sm mt-2">
-          You're now enrolled in <span className="font-semibold text-gray-800">{course?.title}</span>.
+          You're now enrolled in{" "}
+          <span className="font-semibold text-gray-800">
+            {course?.title}
+          </span>.
         </p>
+
         <button
           onClick={onStart}
           className="w-full mt-6 bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-700 transition flex items-center justify-center gap-2"
         >
           <PlayCircle className="w-5 h-5" /> Start Learning
         </button>
-        <button onClick={onClose} className="mt-3 text-sm text-gray-400 hover:text-gray-600 transition">
+
+        <button
+          onClick={onClose}
+          className="mt-3 text-sm text-gray-400 hover:text-gray-600 transition"
+        >
           Maybe later
         </button>
+
       </div>
     </div>
   );
 }
-
 
 function CartToast({ course, onClose }) {
   return (
     <div className="fixed bottom-6 right-6 z-50 bg-white border border-gray-200 rounded-2xl shadow-xl p-4 flex items-center gap-4 max-w-xs animate-bounce-once">
+
       <div className="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center shrink-0">
         <ShoppingCart className="w-5 h-5 text-indigo-600" />
       </div>
+
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold text-gray-800">Added to Cart</p>
-        <p className="text-xs text-gray-400 truncate">{course?.title}</p>
+        <p className="text-sm font-semibold text-gray-800">
+          Added to Cart
+        </p>
+        <p className="text-xs text-gray-400 truncate">
+          {course?.title}
+        </p>
       </div>
-      <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+
+      <button
+        onClick={onClose}
+        className="text-gray-400 hover:text-gray-600"
+      >
         <X className="w-4 h-4" />
       </button>
+
     </div>
   );
 }
 
+/* Main component */
+
 export default function Course() {
-  const [currentPage,    setCurrentPage]    = useState(1);
-  const [showFilters,    setShowFilters]    = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [showFilters, setShowFilters] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
 
   // ── NEW state ──
-  const [enrolledCourse,  setEnrolledCourse]  = useState(null); // shows success modal
-  const [playingCourse,   setPlayingCourse]   = useState(null); // shows CoursePlayer
-  const [cartCourse,      setCartCourse]      = useState(null); // shows cart toast
-  const [cartItems,       setCartItems]       = useState([]);
+  const [enrolledCourse, setEnrolledCourse] = useState(null);
+  const [playingCourse, setPlayingCourse] = useState(null);
+  const [cartCourse, setCartCourse] = useState(null);
+  const [cartItems, setCartItems] = useState([]);
 
   // Filter state
   const [selCategories, setSelCategories] = useState([]);
-  const [selPrice,      setSelPrice]      = useState([]);
-  const [selRatings,    setSelRatings]    = useState([]);
-  const [selLevels,     setSelLevels]     = useState([]);
+  const [selPrice, setSelPrice] = useState([]);
+  const [selRatings, setSelRatings] = useState([]);
+  const [selLevels, setSelLevels] = useState([]);
 
   const courses = useSelector((state) => state.courses.courses);
 
   const toggle = (setter, list, value) =>
-    setter(list.includes(value) ? list.filter((i) => i !== value) : [...list, value]);
+    setter(
+      list.includes(value)
+        ? list.filter((i) => i !== value)
+        : [...list, value]
+    );
 
-  const anyFilter = selCategories.length || selPrice.length || selRatings.length || selLevels.length;
+  const anyFilter =
+    selCategories.length ||
+    selPrice.length ||
+    selRatings.length ||
+    selLevels.length;
 
   const filtered = courses.filter((c) => {
     if (selCategories.length && !selCategories.includes(c.category)) return false;
@@ -92,10 +146,10 @@ export default function Course() {
   });
 
   const coursesPerPage = 3;
-  const indexOfLast    = currentPage * coursesPerPage;
-  const indexOfFirst   = indexOfLast - coursesPerPage;
+  const indexOfLast = currentPage * coursesPerPage;
+  const indexOfFirst = indexOfLast - coursesPerPage;
   const currentCourses = filtered.slice(indexOfFirst, indexOfLast);
-  const totalPages     = Math.ceil(filtered.length / coursesPerPage);
+  const totalPages = Math.ceil(filtered.length / coursesPerPage);
 
   const handleToggle = (setter, list, value) => {
     toggle(setter, list, value);
@@ -108,13 +162,19 @@ export default function Course() {
   };
 
   const handleAddToCart = (course) => {
-    setCartItems((prev) => prev.find((c) => c.id === course.id) ? prev : [...prev, course]);
+    setCartItems((prev) =>
+      prev.find((c) => c.id === course.id)
+        ? prev
+        : [...prev, course]
+    );
+
     setCartCourse(course);
     setSelectedCourse(null);
+
     setTimeout(() => setCartCourse(null), 3500);
   };
 
-  // ── If a course is playing, show full-screen player ──────────────
+  // ── If playing ──
   if (playingCourse) {
     return (
       <CoursePlayer
@@ -126,86 +186,136 @@ export default function Course() {
 
   const FiltersUI = () => (
     <div className="space-y-8">
+
+      {/* CATEGORY */}
       <div>
-        <h4 className="text-sm font-semibold text-gray-900 mb-3 tracking-wide">CATEGORY</h4>
+        <h4 className="text-sm font-semibold text-gray-900 mb-3 tracking-wide">
+          CATEGORY
+        </h4>
+
         <ul className="space-y-3 text-sm text-gray-600">
           {["Web Development", "UI/UX Design", "Mobile Dev", "Data Science"].map((item) => (
             <li key={item} className="flex items-center gap-2">
-              <input type="checkbox" checked={selCategories.includes(item)}
+              <input
+                type="checkbox"
+                checked={selCategories.includes(item)}
                 onChange={() => handleToggle(setSelCategories, selCategories, item)}
-                className="w-4 h-4 accent-blue-600 cursor-pointer" />
+                className="w-4 h-4 accent-blue-600 cursor-pointer"
+              />
               {item}
             </li>
           ))}
         </ul>
       </div>
+
+      {/* PRICE */}
       <div>
-        <h4 className="text-sm font-semibold text-gray-900 mb-3 tracking-wide">PRICE</h4>
+        <h4 className="text-sm font-semibold text-gray-900 mb-3 tracking-wide">
+          PRICE
+        </h4>
+
         <ul className="space-y-3 text-sm text-gray-600">
           {["Paid", "Free"].map((item) => (
             <li key={item} className="flex items-center gap-2">
-              <input type="checkbox" checked={selPrice.includes(item.toLowerCase())}
+              <input
+                type="checkbox"
+                checked={selPrice.includes(item.toLowerCase())}
                 onChange={() => handleToggle(setSelPrice, selPrice, item.toLowerCase())}
-                className="w-4 h-4 accent-blue-600 cursor-pointer" />
+                className="w-4 h-4 accent-blue-600 cursor-pointer"
+              />
               {item}
             </li>
           ))}
         </ul>
       </div>
+
+      {/* RATING */}
       <div>
-        <h4 className="text-sm font-semibold text-gray-900 mb-3 tracking-wide">RATING</h4>
+        <h4 className="text-sm font-semibold text-gray-900 mb-3 tracking-wide">
+          RATING
+        </h4>
+
         <ul className="space-y-3 text-sm text-gray-600">
           {["4.0", "3.0"].map((rating) => (
             <li key={rating} className="flex items-center gap-2">
-              <input type="checkbox" checked={selRatings.includes(rating)}
+              <input
+                type="checkbox"
+                checked={selRatings.includes(rating)}
                 onChange={() => handleToggle(setSelRatings, selRatings, rating)}
-                className="w-4 h-4 accent-blue-600 cursor-pointer" />
+                className="w-4 h-4 accent-blue-600 cursor-pointer"
+              />
               <span className="flex items-center gap-1">
-                <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />{rating} & Up
+                <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                {rating} & Up
               </span>
             </li>
           ))}
         </ul>
       </div>
+
+      {/* LEVEL */}
       <div>
-        <h4 className="text-sm font-semibold text-gray-900 mb-3 tracking-wide">LEVEL</h4>
+        <h4 className="text-sm font-semibold text-gray-900 mb-3 tracking-wide">
+          LEVEL
+        </h4>
+
         <ul className="space-y-3 text-sm text-gray-600">
           {["Beginner", "Intermediate", "Expert"].map((item) => (
             <li key={item} className="flex items-center gap-2">
-              <input type="checkbox" checked={selLevels.includes(item)}
+              <input
+                type="checkbox"
+                checked={selLevels.includes(item)}
                 onChange={() => handleToggle(setSelLevels, selLevels, item)}
-                className="w-4 h-4 accent-blue-600 cursor-pointer" />
+                className="w-4 h-4 accent-blue-600 cursor-pointer"
+              />
               {item}
             </li>
           ))}
         </ul>
       </div>
-      {anyFilter ? (
+
+      {/* CLEAR */}
+      {anyFilter && (
         <button
-          onClick={() => { setSelCategories([]); setSelPrice([]); setSelRatings([]); setSelLevels([]); setCurrentPage(1); }}
+          onClick={() => {
+            setSelCategories([]);
+            setSelPrice([]);
+            setSelRatings([]);
+            setSelLevels([]);
+            setCurrentPage(1);
+          }}
           className="text-sm text-blue-600 hover:underline font-medium"
-        >Clear all filters</button>
-      ) : null}
+        >
+          Clear all filters
+        </button>
+      )}
+
     </div>
   );
 
   return (
     <>
-      {/* Enroll Success Modal */}
+      {/* Enroll Modal */}
       {enrolledCourse && (
         <EnrollSuccessModal
           course={enrolledCourse}
-          onStart={() => { setPlayingCourse(enrolledCourse); setEnrolledCourse(null); }}
+          onStart={() => {
+            setPlayingCourse(enrolledCourse);
+            setEnrolledCourse(null);
+          }}
           onClose={() => setEnrolledCourse(null)}
         />
       )}
 
       {/* Cart Toast */}
       {cartCourse && (
-        <CartToast course={cartCourse} onClose={() => setCartCourse(null)} />
+        <CartToast
+          course={cartCourse}
+          onClose={() => setCartCourse(null)}
+        />
       )}
 
-      {/* CourseInfo Panel — with wired buttons */}
+      {/* Info Panel */}
       {selectedCourse && (
         <CourseInfoPanel
           course={selectedCourse}
@@ -215,6 +325,7 @@ export default function Course() {
         />
       )}
 
+      {/* MAIN UI */}
       <section className="bg-gray-50 min-h-screen pt-24 pb-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-20">
 

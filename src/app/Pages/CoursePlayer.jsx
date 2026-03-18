@@ -2,81 +2,105 @@
 
 import { useState, useRef } from "react";
 import {
-  PlayCircle, CheckCircle, Clock, ChevronDown, ChevronLeft,
-  BookOpen, FileText, BarChart2, Award, Lock, Play, Menu, X
+  PlayCircle,
+  CheckCircle,
+  Clock,
+  ChevronDown,
+  ChevronLeft,
+  BookOpen,
+  FileText,
+  BarChart2,
+  Award,
+  Lock,
+  Play,
+  Menu,
+  X,
 } from "lucide-react";
 
-// ── Dummy lesson data ──────────────────────────────────────────────────────────
+// dummy data
 const curriculum = [
   {
     title: "Introduction & Setup",
     lessons: [
-      { id: 1, name: "Course Overview",        time: "05:00", done: true,  videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
-      { id: 2, name: "Environment Setup",      time: "12:00", done: true,  videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
-      { id: 3, name: "Your First Project",     time: "08:00", done: false, videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
+      { id: 1, name: "Course Overview", time: "05:00", done: true, videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
+      { id: 2, name: "Environment Setup", time: "12:00", done: true, videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
+      { id: 3, name: "Your First Project", time: "08:00", done: false, videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
     ],
   },
   {
     title: "Core Concepts",
     lessons: [
       { id: 4, name: "Fundamentals Deep Dive", time: "18:00", done: false, videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
-      { id: 5, name: "Practical Patterns",     time: "22:00", done: false, videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
-      { id: 6, name: "Common Mistakes",        time: "14:00", done: false, videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
+      { id: 5, name: "Practical Patterns", time: "22:00", done: false, videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
+      { id: 6, name: "Common Mistakes", time: "14:00", done: false, videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
     ],
   },
   {
     title: "Advanced Topics",
     lessons: [
-      { id: 7, name: "Performance & Scaling",  time: "26:00", done: false, videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
+      { id: 7, name: "Performance & Scaling", time: "26:00", done: false, videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
       { id: 8, name: "Real-World Integration", time: "30:00", done: false, videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
     ],
   },
   {
     title: "Projects & Practice",
     lessons: [
-      { id: 9,  name: "Mini Project #1",       time: "40:00", done: false, videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
-      { id: 10, name: "Mini Project #2",       time: "45:00", done: false, videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
+      { id: 9, name: "Mini Project #1", time: "40:00", done: false, videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
+      { id: 10, name: "Mini Project #2", time: "45:00", done: false, videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
     ],
   },
   {
     title: "Final Capstone",
     lessons: [
-      { id: 11, name: "Capstone Walkthrough",  time: "60:00", done: false, videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
-      { id: 12, name: "Submission & Review",   time: "15:00", done: false, videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
+      { id: 11, name: "Capstone Walkthrough", time: "60:00", done: false, videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
+      { id: 12, name: "Submission & Review", time: "15:00", done: false, videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
     ],
   },
 ];
 
 const assignments = [
-  { id: 1, title: "Setup & Environment Quiz",        due: "Due in 2 days",  status: "pending",   points: 10  },
-  { id: 2, title: "Build a Landing Page",            due: "Due in 5 days",  status: "pending",   points: 30  },
-  { id: 3, title: "Core Concepts Assessment",        due: "Submitted",      status: "submitted", points: 25  },
-  { id: 4, title: "Performance Optimization Task",   due: "Due in 8 days",  status: "pending",   points: 40  },
-  { id: 5, title: "Final Capstone Project",          due: "Due in 14 days", status: "locked",    points: 100 },
+  { id: 1, title: "Setup & Environment Quiz", due: "Due in 2 days", status: "pending", points: 10 },
+  { id: 2, title: "Build a Landing Page", due: "Due in 5 days", status: "pending", points: 30 },
+  { id: 3, title: "Core Concepts Assessment", due: "Submitted", status: "submitted", points: 25 },
+  { id: 4, title: "Performance Optimization Task", due: "Due in 8 days", status: "pending", points: 40 },
+  { id: 5, title: "Final Capstone Project", due: "Due in 14 days", status: "locked", points: 100 },
 ];
 
 const allLessons = curriculum.flatMap((s) => s.lessons);
 
 export default function CoursePlayer({ course, onBack }) {
-  const [activeLesson,   setActiveLesson]   = useState(allLessons[0]);
-  const [activeTab,      setActiveTab]      = useState("video");      // video | assignments | progress
-  const [openSections,   setOpenSections]   = useState([0]);
-  const [completedIds,   setCompletedIds]   = useState(allLessons.filter((l) => l.done).map((l) => l.id));
-  const [sidebarOpen,    setSidebarOpen]    = useState(false);
+  const [activeLesson, setActiveLesson] = useState(allLessons[0]);
+  const [activeTab, setActiveTab] = useState("video"); // video | assignments | progress
+  const [openSections, setOpenSections] = useState([0]);
+  const [completedIds, setCompletedIds] = useState(
+    allLessons.filter((l) => l.done).map((l) => l.id)
+  );
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   const videoRef = useRef(null);
 
   const toggleSection = (i) =>
-    setOpenSections((prev) => prev.includes(i) ? prev.filter((x) => x !== i) : [...prev, i]);
+    setOpenSections((prev) =>
+      prev.includes(i)
+        ? prev.filter((x) => x !== i)
+        : [...prev, i]
+    );
 
   const markDone = (id) =>
-    setCompletedIds((prev) => prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]);
+    setCompletedIds((prev) =>
+      prev.includes(id)
+        ? prev.filter((x) => x !== id)
+        : [...prev, id]
+    );
 
-  const progressPct = Math.round((completedIds.length / allLessons.length) * 100);
+  const progressPct = Math.round(
+    (completedIds.length / allLessons.length) * 100
+  );
 
   const courseTitle = course?.title || "Course Player";
-  const instructor  = course?.instructor || "Instructor";
+  const instructor = course?.instructor || "Instructor";
 
-  // ── Curriculum Sidebar ───────────────────────────────────────────────────────
+  // Sidebar
   const CurriculumSidebar = () => (
     <div className="flex flex-col h-full bg-white border-l border-gray-100">
       <div className="px-4 py-4 border-b border-gray-100 flex items-center justify-between shrink-0">
@@ -111,30 +135,56 @@ export default function CoursePlayer({ course, onBack }) {
                 <p className="text-sm font-medium text-gray-800">{section.title}</p>
                 <p className="text-xs text-gray-400 mt-0.5">{section.lessons.length} lessons</p>
               </div>
-              <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform shrink-0 ${openSections.includes(i) ? "rotate-180" : ""}`} />
+              <ChevronDown
+                className={`w-4 h-4 text-gray-400 transition-transform shrink-0 ${
+                  openSections.includes(i) ? "rotate-180" : ""
+                }`}
+              />
             </button>
 
             {openSections.includes(i) && (
               <ul className="pb-2">
                 {section.lessons.map((lesson) => {
-                  const done   = completedIds.includes(lesson.id);
+                  const done = completedIds.includes(lesson.id);
                   const active = activeLesson?.id === lesson.id;
+
                   return (
                     <li
                       key={lesson.id}
-                      onClick={() => { setActiveLesson(lesson); setActiveTab("video"); setSidebarOpen(false); }}
+                      onClick={() => {
+                        setActiveLesson(lesson);
+                        setActiveTab("video");
+                        setSidebarOpen(false);
+                      }}
                       className={`flex items-center gap-3 px-4 py-2.5 cursor-pointer transition text-sm ${
-                        active ? "bg-indigo-50 border-r-2 border-indigo-600" : "hover:bg-gray-50"
+                        active
+                          ? "bg-indigo-50 border-r-2 border-indigo-600"
+                          : "hover:bg-gray-50"
                       }`}
                     >
-                      {done
-                        ? <CheckCircle className="w-4 h-4 text-indigo-600 shrink-0" />
-                        : <Play className={`w-4 h-4 shrink-0 ${active ? "text-indigo-600" : "text-gray-300"}`} />
-                      }
-                      <span className={`flex-1 truncate ${active ? "text-indigo-700 font-medium" : "text-gray-600"}`}>
+                      {done ? (
+                        <CheckCircle className="w-4 h-4 text-indigo-600 shrink-0" />
+                      ) : (
+                        <Play
+                          className={`w-4 h-4 shrink-0 ${
+                            active ? "text-indigo-600" : "text-gray-300"
+                          }`}
+                        />
+                      )}
+
+                      <span
+                        className={`flex-1 truncate ${
+                          active
+                            ? "text-indigo-700 font-medium"
+                            : "text-gray-600"
+                        }`}
+                      >
                         {lesson.name}
                       </span>
-                      <span className="text-xs text-gray-400 shrink-0">{lesson.time}</span>
+
+                      <span className="text-xs text-gray-400 shrink-0">
+                        {lesson.time}
+                      </span>
                     </li>
                   );
                 })}
