@@ -25,7 +25,7 @@ export default function Featured() {
             price: 124,
             rating: 4.9,
             reviews: "850",
-            image: "/Featured 2.png",
+            image: "/Featured2.png",
             category: "Data Science",
             
         },
@@ -36,7 +36,7 @@ export default function Featured() {
             price: 75,
             rating: 4.7,
             reviews: "920",
-            image: "/Featured 3.png",
+            image: "/Featured3.png",
             category: "Marketing",
             
         },
