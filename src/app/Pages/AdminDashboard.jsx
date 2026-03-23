@@ -40,7 +40,7 @@ const CustomTooltip = ({ active, payload, label }) => {
   );
 };
 
-// ── Edit Modal ─────────────────────────────────────────────────────────────────
+// Edit Modal 
 function EditModal({ course, onClose, onSave }) {
   const [form, setForm] = useState({
     title: course.title || "", instructor: course.instructor || "",
@@ -89,7 +89,7 @@ function EditModal({ course, onClose, onSave }) {
   );
 }
 
-// ── Delete Confirm ─────────────────────────────────────────────────────────────
+// Delete Modal
 function DeleteConfirm({ course, onClose, onConfirm }) {
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4" onClick={onClose}>
@@ -110,7 +110,7 @@ function DeleteConfirm({ course, onClose, onConfirm }) {
   );
 }
 
-// ── Main Admin Dashboard ───────────────────────────────────────────────────────
+// Main Admin Dashboard 
 export default function AdminDashboard() {
   const dispatch = useDispatch();
   const router   = useRouter();
@@ -130,12 +130,12 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     loadData();
-    // ✅ Re-read activity whenever tab gets focus (new student logged in another tab)
+    // Load data when the window is focused
     window.addEventListener("focus", loadData);
     return () => window.removeEventListener("focus", loadData);
   }, []);
 
-  // ✅ Admin-only guard
+  // Only admins can access this dashboard
   if (user.role && user.role !== "admin") {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -156,7 +156,7 @@ export default function AdminDashboard() {
 
   const handleSave   = (updated) => { dispatch(updateCourse(updated)); setEditCourse(null); };
   const handleDelete = () => { 
-  if (!deletingCourse || !deletingCourse.id) return; // ✅ FIX
+  if (!deletingCourse || !deletingCourse.id) return; 
 
   dispatch(deleteCourse(deletingCourse.id)); 
   setDeletingCourse(null); 
