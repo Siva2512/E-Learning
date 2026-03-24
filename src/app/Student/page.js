@@ -1,6 +1,6 @@
-import Dashboard from "../Pages/Student/Dashboard"; 
-import DashboardLayout from "../Components/Layout/DashboardLayout";
-import StudentCourse from "@/app/Pages/Student/StudentCourse";
+"use client";
+import Dashboard from "@/app/Pages/Student/Dashboard";
+import DashboardLayout from "@/app/Components/Layout/DashboardLayout";
 
 export default function Page() {
   return (
