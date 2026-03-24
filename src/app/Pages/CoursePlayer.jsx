@@ -199,7 +199,7 @@ export default function CoursePlayer({ course, onBack }) {
   return (
   <div className="min-h-screen bg-gray-50 flex flex-col pt-18">
 
-      {/* ── Top Nav ── */}
+      {/* Top Nav  */}
       <div className="bg-white border-b border-gray-100 px-4 sm:px-6 py-3 flex items-center gap-4 sticky top-0 z-30 shadow-sm">
         <button
           onClick={onBack}
@@ -229,7 +229,7 @@ export default function CoursePlayer({ course, onBack }) {
         </button>
       </div>
 
-      {/* ── Body ── */}
+      {/* Body  */}
       <div className="flex flex-1 overflow-hidden">
 
         {/* Main content */}
@@ -256,7 +256,7 @@ export default function CoursePlayer({ course, onBack }) {
             ))}
           </div>
 
-          {/* ── VIDEO TAB ── */}
+          {/* VIDEO TAB  */}
           {activeTab === "video" && (
             <div className="p-4 sm:p-6 space-y-5">
 
@@ -323,7 +323,7 @@ export default function CoursePlayer({ course, onBack }) {
             </div>
           )}
 
-          {/* ── ASSIGNMENTS TAB ── */}
+          {/*  ASSIGNMENTS TAB  */}
           {activeTab === "assignments" && (
             <div className="p-4 sm:p-6 space-y-4">
               <div className="flex items-center justify-between">
@@ -378,7 +378,7 @@ export default function CoursePlayer({ course, onBack }) {
             </div>
           )}
 
-          {/* ── PROGRESS TAB ── */}
+          {/*PROGRESS TAB */}
           {activeTab === "progress" && (
             <div className="p-4 sm:p-6 space-y-5">
               <h2 className="text-lg font-bold text-gray-900">Your Progress</h2>

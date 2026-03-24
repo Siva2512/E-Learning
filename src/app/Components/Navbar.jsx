@@ -58,9 +58,9 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex items-center gap-2">
             <GiStarShuriken className="w-6 h-6 text-blue-600" />
-            <span className="text-lg font-semibold tracking-tight text-gray-900">
-              EduMaster
-            </span>
+           <Link href="/">
+           <span className="text-lg font-semibold tracking-tight text-gray-900">
+            EduMaster</span></Link>
           </div>
 
           {/* Nav Links */}
