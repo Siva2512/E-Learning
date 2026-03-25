@@ -15,7 +15,7 @@ import { IoMenuSharp } from "react-icons/io5";
 import CoursePlayer    from "./CoursePlayer";
 import CourseInfoPanel from "./CourseInfoPanel";
 
-
+// enroll success modal
 function EnrollSuccessModal({ course, onStart, onClose }) {
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
@@ -41,7 +41,7 @@ function EnrollSuccessModal({ course, onStart, onClose }) {
   );
 }
 
-
+// cart toast
 function CartToast({ course, onClose }) {
   return (
     <div className="fixed bottom-6 right-6 z-50 bg-white border border-gray-200 rounded-2xl shadow-xl p-4 flex items-center gap-4 max-w-xs">
@@ -59,7 +59,7 @@ function CartToast({ course, onClose }) {
   );
 }
 
-//Main Course Page
+// Main Course Page 
 export default function Course() {
   const dispatch = useDispatch();
   const router   = useRouter();
@@ -99,9 +99,35 @@ export default function Course() {
 
   const handleToggle = (setter, list, value) => { toggle(setter, list, value); setCurrentPage(1); };
 
- 
+  //  Enroll — dispatch to Redux + save to localStorage + notify dashboard
   const handleEnroll = (course) => {
     dispatch(enrollCourse(course));
+
+    // Immediately save to per-user localStorage so Dashboard picks it up
+    const user = typeof window !== "undefined"
+      ? JSON.parse(localStorage.getItem("user") || "{}")
+      : {};
+    if (user.email) {
+      const key     = `enrolledCourses_${user.email}`;
+      const saved   = JSON.parse(localStorage.getItem(key) || "[]");
+      const already = saved.find((c) => c.id === course.id);
+      if (!already) {
+        saved.push({
+          id:           course.id,
+          title:        course.title,
+          instructor:   course.instructor,
+          image:        course.image,
+          hours:        course.hours,
+          level:        course.level,
+          progress:     0,
+          lastAccessed: new Date().toISOString(),
+        });
+        localStorage.setItem(key, JSON.stringify(saved));
+      }
+      
+      window.dispatchEvent(new StorageEvent("storage", { key }));
+    }
+
     setSelectedCourse(null);
     setEnrolledCourse(course);
   };
@@ -183,7 +209,7 @@ export default function Course() {
       {enrolledCourse && (
         <EnrollSuccessModal
           course={enrolledCourse}
-          onStart={() => { setEnrolledCourse(null); router.push("/Student"); }} // ✅ go to dashboard
+          onStart={() => { setPlayingCourse(enrolledCourse); setEnrolledCourse(null); }}
           onClose={() => setEnrolledCourse(null)}
         />
       )}

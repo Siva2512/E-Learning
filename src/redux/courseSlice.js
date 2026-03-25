@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  enrolledCourses: [], 
+  enrolledCourses: [], // { id, title, instructor, image, progress, lastAccessed }
   courses: [
     {
       id: 1,
@@ -83,14 +83,17 @@ const courseSlice = createSlice({
   initialState,
   reducers: {
 
+    // Add a new course (teacher only)
     addCourse: (state, action) => {
       state.courses.push(action.payload);
     },
 
+    // Delete a course by id
     deleteCourse: (state, action) => {
       state.courses = state.courses.filter((c) => c.id !== action.payload);
     },
 
+    // Edit a course by id
     updateCourse: (state, action) => {
       const index = state.courses.findIndex((c) => c.id === action.payload.id);
       if (index !== -1) {
@@ -98,59 +101,61 @@ const courseSlice = createSlice({
       }
     },
 
+    // Enroll student in a course — stored per user email
     enrollCourse: (state, action) => {
       const course = action.payload;
-
-      // safety check
-      if (!state.enrolledCourses) {
-        state.enrolledCourses = [];
-      }
-
-      const exists = state.enrolledCourses.find(
-        (c) => c.id === course.id
-      );
-
+      const exists = state.enrolledCourses.find((c) => c.id === course.id);
       if (!exists) {
-        state.enrolledCourses.push({
-          id: course.id,
-          title: course.title,
-          instructor: course.instructor,
-          image: course.image,
-          hours: course.hours,
-          level: course.level,
-          progress: 0,
+        const entry = {
+          id:           course.id,
+          title:        course.title,
+          instructor:   course.instructor,
+          image:        course.image,
+          hours:        course.hours,
+          level:        course.level,
+          progress:     0,
           lastAccessed: new Date().toISOString(),
-        });
+        };
+        state.enrolledCourses.push(entry);
+
+        //  Also save per-user in localStorage
+        if (typeof window !== "undefined") {
+          const user  = JSON.parse(localStorage.getItem("user") || "{}");
+          const key   = `enrolledCourses_${user.email}`;
+          const saved = JSON.parse(localStorage.getItem(key) || "[]");
+          if (!saved.find((c) => c.id === course.id)) {
+            saved.push(entry);
+            localStorage.setItem(key, JSON.stringify(saved));
+          }
+        }
       }
     },
 
+    // Clear enrolled courses when user logs out / switches account
+    clearEnrolledCourses: (state) => {
+      state.enrolledCourses = [];
+    },
+
+    // Update student progress on a course
     updateProgress: (state, action) => {
       const { id, progress } = action.payload;
-
-      const enrolled = (state.enrolledCourses || []).find(
-        (c) => c.id === id
-      );
-
+      // update in enrolledCourses
+      const enrolled = state.enrolledCourses.find((c) => c.id === id);
       if (enrolled) {
-        enrolled.progress = progress;
+        enrolled.progress     = progress;
         enrolled.lastAccessed = new Date().toISOString();
+        enrolled.status       = progress === 100 ? "completed" : "continue";
       }
-
+      // also update in courses
       const course = state.courses.find((c) => c.id === id);
       if (course) {
         course.progress = progress;
+        course.status   = progress === 100 ? "completed" : "continue";
       }
     },
 
   },
 });
 
-export const {
-  addCourse,
-  deleteCourse,
-  updateCourse,
-  updateProgress,
-  enrollCourse
-} = courseSlice.actions;
-
+export const { addCourse, deleteCourse, updateCourse, updateProgress, enrollCourse, clearEnrolledCourses } = courseSlice.actions;
 export default courseSlice.reducer;

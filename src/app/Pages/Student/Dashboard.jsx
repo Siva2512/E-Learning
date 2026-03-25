@@ -1,23 +1,47 @@
 "use client";
 
 import Image from "next/image";
+import CoursePlayer from "../CoursePlayer";
 import { BookOpen, CheckCircle, Clock, PlayCircle } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+
 import { useRouter } from "next/navigation";
 
 export default function Dashboard() {
   const router          = useRouter();
-  const enrolledCourses = useSelector(
-  (state) => state.courses?.enrolledCourses || []
-);
+  const [enrolledCourses, setEnrolledCourses] = useState([]);
 
-  const [userName, setUserName] = useState("User");
+  const [userName,      setUserName]      = useState("");
+  const [userRole,      setUserRole]      = useState("");
+  const [playingCourse, setPlayingCourse] = useState(null);
 
   useEffect(() => {
     const savedUser = JSON.parse(localStorage.getItem("user") || "{}");
     if (savedUser?.name) setUserName(savedUser.name);
+    if (savedUser?.role) setUserRole(savedUser.role);
+
+    //  Load only if student's enrolled courses
+    const loadCourses = () => {
+      if (savedUser?.email) {
+        const key     = `enrolledCourses_${savedUser.email}`;
+        const courses = JSON.parse(localStorage.getItem(key) || "[]");
+        setEnrolledCourses(courses);
+      }
+    };
+
+    loadCourses();
+
+    //  Re-load instantly when a new course is enrolled from storage
+    window.addEventListener("storage", loadCourses);
+    return () => window.removeEventListener("storage", loadCourses);
   }, []);
+
+  
+  useEffect(() => {
+    if (userRole === "admin") {
+      router.push("/AdminPage");
+    }
+  }, [userRole]);
 
   const today = new Date();
 
@@ -42,27 +66,33 @@ export default function Dashboard() {
   const getLastAccessed = (iso) => {
     if (!iso) return "Recently";
     const diff = Math.floor((Date.now() - new Date(iso)) / 1000);
-    if (diff < 60)   return "Just now";
-    if (diff < 3600) return `${Math.floor(diff / 60)} min ago`;
+    if (diff < 60)    return "Just now";
+    if (diff < 3600)  return `${Math.floor(diff / 60)} min ago`;
     if (diff < 86400) return `${Math.floor(diff / 3600)} hr ago`;
     return `${Math.floor(diff / 86400)} days ago`;
   };
 
-  const inProgress  = enrolledCourses.filter((c) => (c.progress || 0) < 100);
-  const completed   = enrolledCourses.filter((c) => (c.progress || 0) === 100);
+  const inProgress = enrolledCourses.filter((c) => (c.progress || 0) < 100);
+  const completed  = enrolledCourses.filter((c) => (c.progress || 0) === 100);
+
+  // Show CoursePlayer fullscreen when a course is playing
+  if (playingCourse) {
+    return <CoursePlayer course={playingCourse} onBack={() => setPlayingCourse(null)} />;
+  }
 
   return (
     <div className="flex bg-gray-100 min-h-screen p-4 sm:p-6">
       <main className="flex flex-col lg:flex-row w-full gap-6">
 
-        {/* ── LEFT ── */}
+        {/* LEFT*/}
         <section className="flex-1 flex flex-col gap-6">
 
-          {/* Welcome */}
+        
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 py-4 rounded-2xl">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">
-                Welcome back, {userName}! 👋
+                {/*  only show name for students */}
+                Welcome back, {userRole === "student" ? userName : "Student"}! 👋
               </h1>
               <p className="text-sm text-gray-500 mt-1">
                 {inProgress.length > 0
@@ -98,7 +128,6 @@ export default function Dashboard() {
               <h2 className="text-lg font-semibold text-gray-900">Continue Learning</h2>
             </div>
 
-            {/* No enrolled courses state */}
             {enrolledCourses.length === 0 ? (
               <div className="bg-white rounded-2xl p-8 text-center shadow-sm border border-gray-100">
                 <div className="text-4xl mb-3">📚</div>
@@ -112,7 +141,6 @@ export default function Dashboard() {
                 </button>
               </div>
             ) : (
-              /*  Show all enrolled courses */
               <div className="flex flex-col gap-4">
                 {enrolledCourses.map((course) => {
                   const progress = course.progress || 0;
@@ -128,7 +156,6 @@ export default function Dashboard() {
                         height={120}
                         className="rounded-xl object-cover w-full md:w-[180px] h-[120px] shrink-0"
                       />
-
                       <div className="flex-1 w-full min-w-0">
                         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 mb-2">
                           <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-md font-medium w-fit uppercase tracking-wide">
@@ -138,15 +165,10 @@ export default function Dashboard() {
                             Last accessed: {getLastAccessed(course.lastAccessed)}
                           </span>
                         </div>
-
-                        <h3 className="font-semibold text-gray-900 line-clamp-2">
-                          {course.title}
-                        </h3>
-
+                        <h3 className="font-semibold text-gray-900 line-clamp-2">{course.title}</h3>
                         <p className="text-xs text-gray-500 mt-1">
                           By {course.instructor} {course.hours ? `· ${course.hours} hrs` : ""}
                         </p>
-
                         <div className="flex justify-between mt-3 text-xs text-gray-500">
                           <span>Course Progress</span>
                           <span className="font-medium text-gray-700">{progress}%</span>
@@ -157,16 +179,14 @@ export default function Dashboard() {
                             style={{ width: `${progress}%` }}
                           />
                         </div>
-
                         <div className="flex items-center gap-3 mt-4">
                           <button
-                            onClick={() => router.push("/CourseDetails")}
+                            onClick={() => setPlayingCourse(course)}
                             className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-sm font-medium shadow flex items-center gap-2 transition"
                           >
                             <PlayCircle className="w-4 h-4" />
                             {progress > 0 ? "Resume" : "Start"} Lesson
                           </button>
-
                           {progress === 100 && (
                             <span className="text-xs bg-green-100 text-green-700 px-3 py-1.5 rounded-full font-medium flex items-center gap-1">
                               <CheckCircle className="w-3.5 h-3.5" /> Completed
@@ -181,7 +201,7 @@ export default function Dashboard() {
             )}
           </div>
 
-          {/* Weekly Activity placeholder */}
+          {/* Weekly Activity */}
           <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
             <div className="flex justify-between mb-4">
               <p className="font-semibold text-gray-900">Weekly Activity</p>
@@ -205,7 +225,7 @@ export default function Dashboard() {
 
         </section>
 
-        {/* ── RIGHT ── */}
+        {/* RIGHT SIDE */}
         <div className="w-full lg:w-[340px] flex flex-col gap-6">
 
           {/* Upcoming Deadlines */}
@@ -214,7 +234,6 @@ export default function Dashboard() {
               <p className="font-semibold text-gray-900">Upcoming Deadlines</p>
               <p className="text-xs text-blue-600 cursor-pointer hover:underline">View all</p>
             </div>
-
             {deadlines.map((item, i) => {
               const daysLeft = getDaysLeft(item.date);
               const month    = item.date.toLocaleString("en-US", { month: "short" }).toUpperCase();
@@ -267,7 +286,6 @@ export default function Dashboard() {
           </div>
 
         </div>
-
       </main>
     </div>
   );

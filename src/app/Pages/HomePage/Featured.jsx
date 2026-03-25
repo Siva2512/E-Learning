@@ -5,44 +5,56 @@ import Image from "next/image";
 import { Star } from "lucide-react";
 import { FaArrowRight } from "react-icons/fa";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Featured() {
   const router  = useRouter();
   const courses = useSelector((state) => state.courses.courses);
 
-  const [current,          setCurrent]          = useState(0);
-  const [showLoginPrompt,  setShowLoginPrompt]  = useState(false);
-  const [visible,          setVisible]          = useState(3);
+  const [current,         setCurrent]         = useState(0);
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+  const [visible,         setVisible]         = useState(1); // start at 1 to avoid hydration mismatch
+  const [animating,       setAnimating]       = useState(false);
+  const intervalRef = useRef(null);
 
   const total    = courses.length;
   const maxIndex = Math.max(0, total - visible);
 
-  // ✅ Fix 1: update visible count based on screen width
+  // Responsive visible count
   useEffect(() => {
     const update = () => {
-      if      (window.innerWidth < 768)  setVisible(1); // mobile  → 1 card
-      else if (window.innerWidth < 1024) setVisible(2); // tablet  → 2 cards
-      else                               setVisible(3); // desktop → 3 cards
+      if      (window.innerWidth < 768)  setVisible(1);
+      else if (window.innerWidth < 1024) setVisible(2);
+      else                               setVisible(3);
     };
     update();
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
   }, []);
 
-  // ✅ Fix 2: auto-slide every 3s, respects current visible count
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrent((c) => (c >= maxIndex ? 0 : c + 1));
-    }, 3000);
-    return () => clearInterval(timer);
-  }, [maxIndex]);
-
-  // ✅ Fix 3: reset current if resize makes it out of bounds
+  // Reset current when maxIndex shrinks on resize
   useEffect(() => {
     if (current > maxIndex) setCurrent(0);
-  }, [maxIndex, current]);
+  }, [maxIndex]);
+
+  // Auto-slide with smooth fade
+  const goTo = (next) => {
+    if (animating) return;
+    setAnimating(true);
+    setTimeout(() => {
+      setCurrent(next);
+      setAnimating(false);
+    }, 300);
+  };
+
+  useEffect(() => {
+    intervalRef.current = setInterval(() => {
+      const next = current >= maxIndex ? 0 : current + 1;
+      goTo(next);
+    }, 3500);
+    return () => clearInterval(intervalRef.current);
+  }, [current, maxIndex]);
 
   const visibleCourses = courses.slice(current, current + visible);
 
@@ -56,8 +68,21 @@ export default function Featured() {
     router.push("/CourseDetails");
   };
 
+  const handleDotClick = (i) => {
+    clearInterval(intervalRef.current);
+    goTo(i);
+  };
+
   return (
     <>
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes fadeSlide {
+          from { opacity: 0; transform: translateX(24px); }
+          to   { opacity: 1; transform: translateX(0); }
+        }
+        .card-enter { animation: fadeSlide 0.35s ease forwards; }
+      `}} />
+
       {/* Login Prompt Modal */}
       {showLoginPrompt && (
         <div
@@ -91,8 +116,7 @@ export default function Featured() {
         </div>
       )}
 
-      {/* ✅ Fix 4: px-4 on mobile, not px-20 */}
-      <section className="bg-white py-16 max-w-7xl mx-auto px-6 lg:px-20 flex flex-col lg:flex-row items-center  gap-12 lg:gap-16">
+      <section className="bg-white py-16 sm:py-20 px-4 sm:px-8 lg:px-20">
         <div className="max-w-7xl mx-auto">
 
           {/* Header */}
@@ -101,26 +125,27 @@ export default function Featured() {
               <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900">
                 Featured Courses
               </h2>
-              <p className="mt-2 text-gray-600">
+              <p className="mt-2 text-gray-600 text-sm sm:text-base">
                 Hand-picked courses by our top-tier instructors.
               </p>
             </div>
             <Link href="/CourseDetails">
-              <button className="flex items-center gap-2 text-blue-400 font-semibold cursor-pointer hover:underline">
-                View all <FaArrowRight />
+              <button className="flex items-center gap-2 text-blue-500 font-semibold hover:underline text-sm">
+                View all <FaArrowRight className="w-3 h-3" />
               </button>
             </Link>
           </div>
 
-          {/* ✅ Fix 5: dynamic grid columns match visible count */}
+          {/* Cards — dynamic columns */}
           <div
-            className="grid gap-6"
+            className={`grid gap-5 transition-opacity duration-300 ${animating ? "opacity-0" : "opacity-100"}`}
             style={{ gridTemplateColumns: `repeat(${visible}, minmax(0, 1fr))` }}
           >
-            {visibleCourses.map((course) => (
+            {visibleCourses.map((course, idx) => (
               <div
-                key={course.id}
-                className="bg-gray-100 flex flex-col rounded-2xl shadow-sm p-4 hover:shadow-md transition"
+                key={`${course.id}-${current}`}
+                className="card-enter bg-gray-50 border border-gray-100 flex flex-col rounded-2xl shadow-sm p-4 hover:shadow-md transition-shadow"
+                style={{ animationDelay: `${idx * 60}ms` }}
               >
                 {/* Image */}
                 <div className="relative rounded-xl overflow-hidden">
@@ -129,37 +154,37 @@ export default function Featured() {
                     alt={course.title}
                     width={500}
                     height={300}
-                    className="w-full h-48 object-cover"
+                    className="w-full h-44 object-cover"
                   />
-                  <span className="absolute top-3 right-3 bg-white text-blue-600 text-xs font-semibold px-3 py-1 rounded-md shadow">
+                  <span className="absolute top-3 right-3 bg-white text-blue-600 text-xs font-semibold px-2.5 py-1 rounded-md shadow-sm">
                     {course.level || course.category || "Course"}
                   </span>
                 </div>
 
-                <div className="mt-3 flex flex-col flex-1">
+                <div className="mt-3 flex flex-col flex-1 gap-1">
                   {/* Rating */}
-                  <div className="flex items-center gap-2 mt-2 text-sm text-gray-600">
-                    <Star className="w-4 h-4 text-yellow-400 fill-yellow-500" />
+                  <div className="flex items-center gap-1.5 text-sm text-gray-500">
+                    <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
                     <span className="font-semibold text-yellow-500">{course.rating}</span>
-                    <span>({course.reviews} reviews)</span>
+                    <span className="text-xs">({course.reviews} reviews)</span>
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-lg font-semibold text-gray-900 mt-2 line-clamp-2">
+                  <h3 className="text-base font-semibold text-gray-900 mt-1 line-clamp-2 leading-snug">
                     {course.title}
                   </h3>
 
                   {/* Instructor */}
-                  <div className="flex items-center gap-3 mt-3">
-                    <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 text-xs font-bold shrink-0">
+                  <div className="flex items-center gap-2 mt-2">
+                    <div className="w-7 h-7 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 text-xs font-bold shrink-0">
                       {(course.instructor || "I").charAt(0)}
                     </div>
-                    <p className="text-sm text-gray-600">{course.instructor}</p>
+                    <p className="text-xs text-gray-500 truncate">{course.instructor}</p>
                   </div>
 
                   {/* Price + Enroll */}
-                  <div className="border-t border-[#e0e0e0] mt-auto pt-4 flex items-center justify-between">
-                    <p className="text-lg font-bold text-gray-900">
+                  <div className="border-t border-gray-200 mt-auto pt-3 flex items-center justify-between">
+                    <p className="text-base font-bold text-gray-900">
                       {Number(course.price) === 0
                         ? <span className="text-green-600">Free</span>
                         : `$${Number(course.price).toFixed(2)}`
@@ -167,7 +192,7 @@ export default function Featured() {
                     </p>
                     <button
                       onClick={handleEnroll}
-                      className="text-blue-500 font-semibold hover:text-blue-400 cursor-pointer transition"
+                      className="text-sm text-blue-500 font-semibold hover:text-blue-400 transition"
                     >
                       Enroll Now →
                     </button>
@@ -179,13 +204,13 @@ export default function Featured() {
 
           {/* Dot indicators */}
           {total > visible && (
-            <div className="flex justify-center gap-1.5 mt-8">
+            <div className="flex justify-center gap-2 mt-8">
               {Array.from({ length: maxIndex + 1 }).map((_, i) => (
                 <button
                   key={i}
-                  onClick={() => setCurrent(i)}
-                  className={`h-1.5 rounded-full transition-all ${
-                    i === current ? "w-6 bg-blue-500" : "w-2 bg-gray-300"
+                  onClick={() => handleDotClick(i)}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    i === current ? "w-7 bg-blue-500" : "w-2 bg-gray-300 hover:bg-gray-400"
                   }`}
                 />
               ))}
