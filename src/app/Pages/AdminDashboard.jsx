@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useState, useEffect } from "react"; //store data and run code after render
+import { useSelector, useDispatch } from "react-redux"; //get data from store and send actions(add, delete, update)
 import { deleteCourse, updateCourse } from "../../redux/courseSlice";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
@@ -42,12 +42,12 @@ const CustomTooltip = ({ active, payload, label }) => {
 
 // Edit Modal 
 function EditModal({ course, onClose, onSave }) {
-  const [form, setForm] = useState({
+  const [form, setForm] = useState({ //store form values
     title: course.title || "", instructor: course.instructor || "",
     price: course.price || "", hours: course.hours || "",
     level: course.level || "", desc: course.desc || "", image: course.image || "",
   });
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value }); //update input values
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4" onClick={onClose}>
@@ -112,27 +112,27 @@ function DeleteConfirm({ course, onClose, onConfirm }) {
 
 // Main Admin Dashboard 
 export default function AdminDashboard() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch(); //used to dispatch actions
   const router   = useRouter();
-  const courses  = useSelector((state) => state.courses.courses);
+  const courses  = useSelector((state) => state.courses.courses); //get the courses from the redux store
 
-  const [user,           setUser]           = useState({});
-  const [editCourse,     setEditCourse]     = useState(null);
-  const [deletingCourse, setDeletingCourse] = useState(null);
-  const [recentActivity, setRecentActivity] = useState([]);
-
+  const [user, setUser] = useState({}); //store user data
+  const [editCourse, setEditCourse] = useState(null); //store the course to be edited
+  const [deletingCourse, setDeletingCourse] = useState(null); //store the course to be deleted
+  const [recentActivity, setRecentActivity] = useState([]); //activity data
+//load data
   const loadData = () => {
-    const stored   = JSON.parse(localStorage.getItem("user")            || "{}");
-    const activity = JSON.parse(localStorage.getItem("studentActivity") || "[]");
+    const stored = JSON.parse(localStorage.getItem("user") || "{}"); //get user data
+    const activity = JSON.parse(localStorage.getItem("studentActivity") || "[]");//get activity data
     setUser(stored);
-    setRecentActivity(activity);
+    setRecentActivity(activity); //save into state
   };
 
   useEffect(() => {
     loadData();
-    // Load data when the window is focused
-    window.addEventListener("focus", loadData);
-    return () => window.removeEventListener("focus", loadData);
+    // Load data when page is loaded
+    window.addEventListener("focus", loadData); //Refresh when tab is active
+    return () => window.removeEventListener("focus", loadData); //cleanup
   }, []);
 
   // Only admins can access this dashboard
@@ -154,7 +154,9 @@ export default function AdminDashboard() {
     );
   }
 
-  const handleSave   = (updated) => { dispatch(updateCourse(updated)); setEditCourse(null); };
+  const handleSave = (updated) => {
+  dispatch(updateCourse(updated));
+};
   const handleDelete = () => { 
   if (!deletingCourse || !deletingCourse.id) return; 
 
@@ -168,8 +170,21 @@ export default function AdminDashboard() {
 
   return (
     <>
-      {editCourse     && <EditModal     course={editCourse}     onClose={() => setEditCourse(null)}     onSave={handleSave}      />}
-      {deletingCourse && <DeleteConfirm course={deletingCourse} onClose={() => setDeletingCourse(null)} onConfirm={handleDelete} />}
+      {editCourse && 
+      <EditModal 
+      course={editCourse} 
+      onClose={() => setEditCourse(null)} 
+      onSave={handleSave} 
+      />
+      }
+    
+    {deletingCourse && 
+    <DeleteConfirm 
+    course={deletingCourse} 
+    onClose={() => setDeletingCourse(null)} 
+    onConfirm={handleDelete} 
+  />
+}
 
       <div className="w-full min-h-screen flex flex-col">
 
@@ -210,7 +225,7 @@ export default function AdminDashboard() {
               ))}
             </div>
 
-            {/* Charts — NO border prop on recharts elements */}
+             {/* Charts  */}
             <div className="grid lg:grid-cols-3 gap-5">
 
               {/* Bar Chart */}

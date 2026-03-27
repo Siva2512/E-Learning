@@ -2,24 +2,35 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useState, useEffect } from "react";
 
 export default function StudentCourse() {
   const [activeTab, setActiveTab] = useState("all");
+  const [courses, setCourses] = useState([]);
 
-  // Pull courses from Redux (same store where AddCourse dispatches to)
-  const reduxCourses = useSelector((state) => state.courses.courses);
+  useEffect(() => {
+    const savedUser = JSON.parse(localStorage.getItem("user") || "{}");
+    const loadCourses = () => {
+      if (savedUser?.email) {
+        const key = `enrolledCourses_${savedUser.email}`;
+        const enrolled = JSON.parse(localStorage.getItem(key) || "[]");
+        
+        const formatted = enrolled.map((course) => ({
+          id:       course.id,
+          title:    course.title,
+          category: course.level || course.category || "General",
+          progress: course.progress  || 0,
+          image:    course.image     || "/Featured1.png",
+          status:   course.progress === 100 ? "completed" : "continue",
+        }));
+        setCourses(formatted);
+      }
+    };
 
-  // Map Redux courses to the shape this component needs
-  const courses = reduxCourses.map((course) => ({
-    id:       course.id,
-    title:    course.title,
-    category: course.category || "General",
-    progress: course.progress  || 0,
-    image:    course.image     || "/Featured1.png",
-    status:   course.progress === 100 ? "completed" : "continue",
-  }));
+    loadCourses();
+    window.addEventListener("storage", loadCourses);
+    return () => window.removeEventListener("storage", loadCourses);
+  }, []);
 
   const inProgressCount = courses.filter((c) => c.status !== "completed").length;
   const completedCount  = courses.filter((c) => c.status === "completed").length;
