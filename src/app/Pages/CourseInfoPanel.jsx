@@ -32,7 +32,7 @@ export default function CourseInfoPanel({ course, onClose, onEnroll, onAddToCart
     "Problem-solving techniques",
   ];
 
-  // ✅ Check if user is logged in
+  //  Check if user is logged in
   const isLoggedIn = () => {
     const user = typeof window !== "undefined"
       ? JSON.parse(localStorage.getItem("user") || "null")
@@ -40,13 +40,13 @@ export default function CourseInfoPanel({ course, onClose, onEnroll, onAddToCart
     return !!user;
   };
 
-  // ✅ Enroll — check login first
+  //  Enroll — check login first
   const handleEnroll = () => {
     if (!isLoggedIn()) { setShowLoginPrompt(true); return; }
     onEnroll();
   };
 
-  // ✅ Add to Cart — check login first
+  //  Add to Cart — check login first
   const handleAddToCart = () => {
     if (!isLoggedIn()) { setShowLoginPrompt(true); return; }
     onAddToCart();
@@ -219,7 +219,7 @@ export default function CourseInfoPanel({ course, onClose, onEnroll, onAddToCart
                     </div>
                   )}
 
-                  {/* ✅ Login-gated buttons */}
+                 
                   <button onClick={handleEnroll}
                     className="w-full mt-5 bg-blue-600 text-white py-3 rounded-xl font-medium hover:bg-blue-700 transition">
                     {price === 0 ? "Enroll for Free" : "Enroll Now"}

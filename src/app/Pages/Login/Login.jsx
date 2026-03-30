@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../../../redux/authSlice";
-import { clearEnrolledCourses } from "@/redux/courseSlice";
 import { useRouter } from "next/navigation";
 import { FiMail, FiLock, FiUser, FiAlertCircle } from "react-icons/fi";
 import Snowfall from "react-snowfall";
@@ -12,11 +11,11 @@ export default function Login({ isOpen, onClose }) {
   const dispatch = useDispatch();
   const router   = useRouter();
 
-  const [loading,      setLoading]      = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [formData,     setFormData]     = useState({ email: "", password: "", role: "student" });
+ const [loading, setLoading] = useState(false);//show  loading state
+const [errorMessage, setErrorMessage] = useState(""); //show error message
+  const [formData, setFormData] = useState({ email: "", password: "", role: "student" });
 
-  if (!isOpen) return null;
+  if (!isOpen) return null; //hide login form
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -30,17 +29,15 @@ export default function Login({ isOpen, onClose }) {
 
     try {
       //  Check against allUsers array that supports multiple accounts
-      const allUsers = JSON.parse(localStorage.getItem("allUsers") || "[]");
+      const allUsers = JSON.parse(localStorage.getItem("allUsers") || "[]");//get all users
 
-      const matched = allUsers.find(
-        (u) =>
-          u.email    === formData.email    &&
+      const matched = allUsers.find((u) =>
+          u.email === formData.email &&
           u.password === formData.password &&
-          u.role     === formData.role
+          u.role === formData.role
       );
 
       if (!matched) {
-        // Fallback: check single "user" key (older signups)
         const singleUser = JSON.parse(localStorage.getItem("user") || "null");
         if (
           !singleUser ||
@@ -79,7 +76,7 @@ export default function Login({ isOpen, onClose }) {
 
       // Redirect based on role
       if (user.role === "admin") {
-        router.push("/admin");
+        router.push("/AdminPage");
       } else {
         router.push("/Student");
       }

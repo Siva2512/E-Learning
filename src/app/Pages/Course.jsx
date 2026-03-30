@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux"; //access data from redux
 import { useRouter } from "next/navigation";
 import { enrollCourse } from "@/redux/courseSlice";
 
@@ -63,22 +63,23 @@ function CartToast({ course, onClose }) {
 export default function Course() {
   const dispatch = useDispatch();
   const router   = useRouter();
-  const courses  = useSelector((state) => state.courses.courses);
+  const courses  = useSelector((state) => state.courses.courses); //get the courses from the redux store
 
-  const [currentPage,    setCurrentPage]    = useState(1);
-  const [showFilters,    setShowFilters]    = useState(false);
-  const [selectedCourse, setSelectedCourse] = useState(null);
-  const [enrolledCourse, setEnrolledCourse] = useState(null);
-  const [playingCourse,  setPlayingCourse]  = useState(null);
-  const [cartCourse,     setCartCourse]     = useState(null);
-  const [cartItems,      setCartItems]      = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [showFilters, setShowFilters] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState(null); //for course player
+  const [enrolledCourse, setEnrolledCourse] = useState(null);//for enroll success modal
+  const [playingCourse, setPlayingCourse]  = useState(null);//for course player
+  const [cartCourse,setCartCourse] = useState(null);
+  const [cartItems, setCartItems]  = useState([]);//store cart items
 
   // Filter state
-  const [selCategories, setSelCategories] = useState([]);
-  const [selPrice,      setSelPrice]      = useState([]);
-  const [selRatings,    setSelRatings]    = useState([]);
-  const [selLevels,     setSelLevels]     = useState([]);
+  const [selCategories, setSelCategories] = useState([]); 
+  const [selPrice,setSelPrice] = useState([]);
+  const [selRatings,setSelRatings] = useState([]);
+  const [selLevels,setSelLevels] = useState([]);
 
+  //toggle function
   const toggle = (setter, list, value) =>
     setter(list.includes(value) ? list.filter((i) => i !== value) : [...list, value]);
 
@@ -99,17 +100,17 @@ export default function Course() {
 
   const handleToggle = (setter, list, value) => { toggle(setter, list, value); setCurrentPage(1); };
 
-  //  Enroll — dispatch to Redux + save to localStorage + notify dashboard
+  //  Enroll — dispatch to Redux and save to localStorage amd notify dashboard
   const handleEnroll = (course) => {
-    dispatch(enrollCourse(course));
+    dispatch(enrollCourse(course)); //sve to redux
 
     // Immediately save to per-user localStorage so Dashboard picks it up
     const user = typeof window !== "undefined"
       ? JSON.parse(localStorage.getItem("user") || "{}")
       : {};
     if (user.email) {
-      const key     = `enrolledCourses_${user.email}`;
-      const saved   = JSON.parse(localStorage.getItem(key) || "[]");
+      const key = `enrolledCourses_${user.email}`;
+      const saved  = JSON.parse(localStorage.getItem(key) || "[]");
       const already = saved.find((c) => c.id === course.id);
       if (!already) {
         saved.push({
@@ -139,7 +140,7 @@ export default function Course() {
     setTimeout(() => setCartCourse(null), 3500);
   };
 
-  if (playingCourse) {
+  if (playingCourse) { 
     return <CoursePlayer course={playingCourse} onBack={() => setPlayingCourse(null)} />;
   }
 

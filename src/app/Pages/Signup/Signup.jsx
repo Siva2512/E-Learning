@@ -18,11 +18,10 @@ const ADMIN_SECRET = "Admin2026";
 
 export default function Signup({ isOpen, onClose }) {
   const dispatch = useDispatch();
-
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [showMessage, setShowMessage] = useState(false);
-  const [adminCode, setAdminCode] = useState("");
+  const [adminCode, setAdminCode] = useState("");//store admin code
   const [showCodeField, setShowCodeField] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -33,17 +32,17 @@ export default function Signup({ isOpen, onClose }) {
     role: "student",
   });
 
-  if (!isOpen) return null;
+  if (!isOpen) return null; //hide signup form
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     if (errorMessage) setErrorMessage("");
-  };
+  };//update input values
 
   const handleRoleSelect = (value) => {
-    setFormData({ ...formData, role: value });
-    setShowCodeField(value === "admin");
-    setAdminCode("");
+    setFormData({ ...formData, role: value }); //set role
+    setShowCodeField(value === "admin"); //if admin show admin code
+    setAdminCode(""); //clear admin code
     setErrorMessage("");
   };
 
@@ -72,14 +71,15 @@ export default function Signup({ isOpen, onClose }) {
         role: formData.role,
       };
 
-      dispatch(signup(userData));
+      dispatch(signup(userData)); //save in redux
 
+      //save in local storage
       const allUsers = JSON.parse(localStorage.getItem("allUsers") || "[]");
       const exists = allUsers.find((u) => u.email === userData.email);
 
       if (!exists) {
-        allUsers.push(userData);
-        localStorage.setItem("allUsers", JSON.stringify(allUsers));
+        allUsers.push(userData);//add new user
+        localStorage.setItem("allUsers", JSON.stringify(allUsers));//save users
       }
 
       localStorage.setItem("user", JSON.stringify(userData));
